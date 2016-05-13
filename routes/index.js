@@ -3,7 +3,7 @@ var jade = require('jade');
 
 router.get('/', function* () {
 	this.status = 200;
-	yield this.body = this.render('index');
+	yield this.render('index');
 });
 
 router.get('/home', function* (){
