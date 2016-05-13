@@ -1,5 +1,4 @@
 var router = require('koa-router')();
-var jade = require('jade');
 
 router.get('/', function* () {
 	this.status = 200;
