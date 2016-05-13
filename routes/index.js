@@ -1,8 +1,9 @@
 var router = require('koa-router')();
+var jade = require('jade');
 
 router.get('/', function* () {
 	this.status = 200;
-	this.body = 'Hello from Index';
+	yield this.body = this.render('index');
 });
 
 router.get('/home', function* (){
