@@ -3,20 +3,18 @@ var body = require('koa-body');
 var views = require('koa-views');
 var serve = require('koa-static');
 var logger = require('koa-logger');
-var router = require('koa-router')();
-var bcrypt = require('bcrypt');
+var pgp = require('pg-promise')();
 
 var app = koa();
 
 // database
 
-var pgp = require('pg-promise')();
 global.db = pgp({
-	host: 'localhost',
-	port: 5432,
-	user: 'kostacoffee',
-	database: 'assignment3'
-
+	host : 'localhost',
+	port : 5432,
+	database : 'assignment3',
+	user : 'webuser',
+	password : 'MnU79g&@s9nacLcB'
 });
 
 // view engine

@@ -308,7 +308,12 @@ CREATE TRIGGER PaymentMethodDeleteTrigger
 /* in the following ALTER USER username SET search_path ... command   */
 /* this ensures that the carsharing schema is automatically used when you query one of its tables */
 /* it assumes that you have loaded our unidb schema from tutorial in week 6             */
-ALTER USER kostacoffee SET search_Path = '$user', public, unidb, carsharing;
+CREATE USER webuser WITH PASSWORD 'MnU79g&@s9nacLcB';
+GRANT ALL ON SCHEMA carsharing to webuser;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA carsharing TO webuser;
+
+ALTER USER webuser SET search_path = carsharing;
+
 
 
 /*
