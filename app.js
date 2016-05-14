@@ -28,7 +28,7 @@ app.use(body());
 
 // mount routes
 
-var routes = require('./routes');
+var routes = require('./routes.js');
 app.use(routes.middleware());
 app.use(routes.allowedMethods());
 
