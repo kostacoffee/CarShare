@@ -4,6 +4,7 @@ var views = require('koa-views');
 var serve = require('koa-static');
 var logger = require('koa-logger');
 var router = require('koa-router')();
+var bcrypt = require('bcrypt');
 
 var app = koa();
 
