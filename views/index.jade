@@ -4,4 +4,8 @@ html
 	body
 		h1 Test
 		p This is a paragraph
+		form(method='post', action='/login')
+			input(name='nickname')
+			input(name='password')
+			input(type='submit')
 		include ./includes/footer.jade

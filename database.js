@@ -20,4 +20,23 @@
 							If a row is found, the promise
 							falls back to 'catch'.
 
+	If you need to edit the data that comes out of the query, follow this:
+	
+	global.<functionName> = function(<any input data>){
+		var query = "<SQL query>";
+		return global.db.many(query, <any input data>)
+		.then(function (data){
+			<do things with data>
+
+			return data;
+		});
+	}
+
+
 */
+
+
+global.getMember = function(nickname) {
+	var query = "SELECT * FROM Member where nickname=$1";
+	return global.db.one(query, nickname);
+}
