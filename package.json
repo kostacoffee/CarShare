@@ -17,7 +17,6 @@
   },
   "homepage": "https://github.com/kostacoffee/INFO2820-Assignment-3#readme",
   "dependencies": {
-    "bcrypt": "^0.8.6",
     "jade": "^1.11.0",
     "koa": "^1.2.0",
     "koa-body": "^1.4.0",

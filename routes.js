@@ -1,6 +1,6 @@
 // Setting up dependencies
 var router = require('koa-router')();
-var bcrypt = require('bcrypt');
+var crypto = require('crypto');
 require('./database.js');
 // End setting up
 
@@ -28,6 +28,12 @@ require('./database.js');
 	See the GET /home route for an example.
 
 */
+
+function getHash(password, salt){
+	var hash = crypto.createHmac('sha512', salt);
+	hash.update(password);	
+	return hash.digest('base64');	
+}
 
 function failed_auth(){
 	this.status = 403;
@@ -57,7 +63,7 @@ router.get('/home', login_required(function* (){
 }));
 
 router.post('/login', function* () {
-	var nickname = this.request.body.nickname;
+	var nickname = this.request.body.nickname.trim();
 	var password = this.request.body.password;
 
 	var member = yield getMember(nickname)
@@ -71,12 +77,10 @@ router.post('/login', function* () {
 	if (member == null){
 		console.log('member cant be found');
 		return;
-	}
+	}	
 
-	var hashedPassword = password;//bcrypt.hashSync(password, 10);
-	console.log(hashedPassword);
-
-	if (member.password == hashedPassword){
+	var passwordHash = getHash(password, member.pw_salt);
+	if (passwordHash == member.password){
 		this.cookies.set("loggedIn", nickname);
 		this.redirect('/home');
 	}

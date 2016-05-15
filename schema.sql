@@ -303,18 +303,6 @@ CREATE TRIGGER PaymentMethodDeleteTrigger
 /* end schema definition */
 
 
-/* IMPORTANT TODO: */
-/* please replace <your-login> with the name of your PostgreSQL login */
-/* in the following ALTER USER username SET search_path ... command   */
-/* this ensures that the carsharing schema is automatically used when you query one of its tables */
-/* it assumes that you have loaded our unidb schema from tutorial in week 6             */
-CREATE USER webuser WITH PASSWORD 'MnU79g&@s9nacLcB';
-GRANT ALL ON SCHEMA carsharing to webuser;
-GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA carsharing TO webuser;
-
-ALTER USER webuser SET search_path = carsharing;
-
-
 
 /*
  * Some optional, more complex semantic integrity constraints
