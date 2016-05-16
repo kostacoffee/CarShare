@@ -1,11 +1,19 @@
-doctype html
-html
-	include ./includes/head.jade
-	body
-		h1 Test
-		p This is a paragraph
+extends ./base.jade
+
+block content
+	div#loginCard.mdl-card.mdl-shadow--2dp
+		div.mdl-card__title
+			h2.mdl-card__title-text Please log in
+
 		form(method='post', action='/login')
-			input(name='nickname')
-			input(name='password', type='password')
-			input(type='submit')
-		include ./includes/footer.jade
+			div.mdl-card__supporting-text
+					div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+						input#nickname.mdl-textfield__input(name='nickname')
+						label.mdl-textfield__label(for='nickname') Nickname
+
+					div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+						input#password.mdl-textfield__input(name='password', type='password')
+						label.mdl-textfield__label(for='password') Password
+
+					div.mdl-card-actions.mdl-card--border
+						input.mdl-button.mdl-js-button.mdl-button-primary(type='submit', name='Log In' )

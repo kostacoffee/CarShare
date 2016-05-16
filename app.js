@@ -34,7 +34,7 @@ app.use(routes.allowedMethods());
 
 // serve assets
 
-app.use(serve('assets'));
+app.use(serve('static'));
 
 //serve requests
 

@@ -1,6 +1,6 @@
 dropdb assignment3
 createdb assignment3
 psql assignment3 < schema.sql
-psql assignment3 < schema_edits.sql
 psql assignment3 < sample_data.sql
+psql assignment3 < schema_edits.sql
 node hash_passwords.js

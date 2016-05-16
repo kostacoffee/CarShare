@@ -1,7 +1,5 @@
-doctype html
-html
-	head
-		include ./includes/head.jade
-	body
-		h1 hi #{nickname}
-		include ./includes/footer.jade
+extends ./base.jade
+block content
+	h2 Welcome #{member.nametitle} #{member.namegiven} #{member.namefamily}
+	p Your current membership plan is: #{member.subscribed}
+	p You've made a total of #{member.stat_nrofbookings} bookings!

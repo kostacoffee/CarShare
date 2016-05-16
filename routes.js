@@ -58,8 +58,9 @@ router.get('/', function* (){
 });
 
 router.get('/home', login_required(function* (){
-	var member = this.cookies.get("loggedIn");
-	yield this.render('home', {nickname : member})
+	var nickname = this.cookies.get("loggedIn");
+	var member = yield getMember(nickname);
+	yield this.render('home', {member : member})
 }));
 
 router.post('/login', function* () {
@@ -76,12 +77,13 @@ router.post('/login', function* () {
 
 	if (member == null){
 		console.log('member cant be found');
+		this.redirect('/');
 		return;
 	}	
 
 	var passwordHash = getHash(password, member.pw_salt);
 	if (passwordHash == member.password){
-		this.cookies.set("loggedIn", nickname);
+		this.cookies.set("loggedIn", member.nickname);
 		this.redirect('/home');
 	}
 	else

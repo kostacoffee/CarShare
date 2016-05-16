@@ -37,6 +37,7 @@
 
 
 global.getMember = function(nickname) {
-	var query = "SELECT * FROM Member where nickname=$1";
+	nickname = nickname.toLowerCase();
+	var query = "SELECT * FROM Member where LOWER(nickname)=$1 or LOWER(email)=$1";
 	return global.db.one(query, nickname);
 }
