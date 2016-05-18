@@ -59,15 +59,12 @@ router.get('/', function* (){
 
 router.get('/home', login_required(function* (){
 	var nickname = this.cookies.get("loggedIn");
-	var member = yield getMember(nickname)
-	.then(function(data){
-		return data;
-	})
-	.catch(function(erorr){
-		return null;
-	});
-	if (member == null)
+	var member = yield getMember("memes");
+	if (member == null){
+		console.log(member);
 		this.redirect('/');
+		return;
+	}
 	yield this.render('home', {member : member})
 }));
 

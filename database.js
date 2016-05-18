@@ -4,7 +4,11 @@
 
 	global.<functionName> = function(<any input data>){
 		var query = "<SQL query>";
-		return global.db.many(query);
+		return global.db.many(query).then(function(data){
+			return data;
+		}).catch(function(){
+			return null;
+		});
 	}
 
 	For example:
@@ -29,6 +33,8 @@
 			<do things with data>
 
 			return data;
+		}).catch(function(){
+			return null;
 		});
 	}
 
@@ -39,5 +45,9 @@
 global.getMember = function(nickname) {
 	nickname = nickname.toLowerCase();
 	var query = "SELECT * FROM Member where LOWER(nickname)=$1 or LOWER(email)=$1";
-	return global.db.one(query, nickname);
+	return global.db.one(query, nickname).then(function(data){
+		return data;
+	}).catch(function(){
+		return null;
+	});
 }
