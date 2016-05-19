@@ -73,6 +73,8 @@ router.post('/login', function* () {
 	var password = this.request.body.password;
 
 	var member = yield getMember(nickname);
+	if (member == null)
+		this.redirect('/');
 
 	var passwordHash = getHash(password, member.pw_salt);
 	if (passwordHash == member.password){
