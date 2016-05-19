@@ -1,6 +1,11 @@
 #loginCard{
 	margin : auto;
 }
+.mdl-layout__content{
+	margin-top: 50px;
+	margin-left : 30px;
+	margin-right: 30px;
+}
 body{
 	background-color: #f5f5f5
 }
