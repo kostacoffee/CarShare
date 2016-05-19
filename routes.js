@@ -54,9 +54,11 @@ function login_required(routeFunction){
 router.get('/', function* (){
 	this.status = 200;
 	var nickname = this.cookies.get("loggedIn");
-	var member = yield getMember(nickname);
-	if (member != null)
-		this.redirect('/home');
+	if (nickname != null){
+		var member = yield getMember(nickname);
+		if (member != null)
+			this.redirect('/home');
+	}
 	yield this.render('index');
 });
 
