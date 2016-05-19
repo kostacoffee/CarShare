@@ -45,9 +45,44 @@
 global.getMember = function(nickname) {
 	nickname = nickname.toLowerCase();
 	var query = "SELECT * FROM Member where LOWER(nickname)=$1 or LOWER(email)=$1";
-	return global.db.one(query, nickname).then(function(data){
+	return global.db.one(query, nickname)
+	.then(function(data){
 		return data;
 	}).catch(function(){
 		return null;
 	});
 }
+
+global.getBooking = function(memberNo, bookingID){
+	var query = "SELECT c.name, c.regno, cb.name, b.startTime::DATE, EXTRACT(HOUR FROM b.startTime), b.endTime::DATE, EXTRACT(HOUR FROM b.endTime), b.whenBooked FROM Booking AS b INNER JOIN Car AS c ON b.car = c.regno INNER JOIN CarBay AS cb ON c.parkedAt = cb.bayID WHERE b.madeBy = $1 AND b.bookingID = $2;";
+	return global.db.one(query, [memberNo, bookingID])
+	.then(function(data){
+		return data;
+	})
+	.catch(function(){
+		return null;
+	});
+}
+
+global.adminGetBooking = function(bookingID){
+	var query = "SELECT c.name, c.regno, cb.name, b.startTime::DATE, EXTRACT(HOUR FROM b.startTime), b.endTime::DATE, EXTRACT(HOUR FROM b.endTime), b.whenBooked FROM Booking AS b INNER JOIN Car AS c ON b.car = c.regno INNER JOIN CarBay AS cb ON c.parkedAt = cb.bayID WHERE b.bookingID = $1;";
+	return global.db.one(query, bookingID)
+	.then(function(data){
+		return data;
+	})
+	.catch(function(){
+		return null;
+	});
+}
+
+global.getBookingHistory = function(memberNo){
+	var query = "SELECT c.name, c.regno, b.startTime::DATE, EXTRACT(HOUR FROM b.endTime - b.startTime) FROM Booking AS b INNER JOIN Car AS c ON b.car = c.regno WHERE madeBy = $1 ORDER BY b.startTime DESC;";
+	return global.db.many(query, memberNo)
+	.then(function(data){
+		return data;
+	})
+	.catch(function(){
+		return null;
+	});
+}
+

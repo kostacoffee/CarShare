@@ -72,13 +72,7 @@ router.post('/login', function* () {
 	var nickname = this.request.body.nickname.trim();
 	var password = this.request.body.password;
 
-	var member = yield getMember(nickname)
-	.then( function(data){
-		return data;
-	})
-	.catch(function(error){
-		return null;
-	});
+	var member = yield getMember(nickname);
 
 	if (member == null){
 		console.log('member cant be found');
@@ -99,6 +93,11 @@ router.post('/login', function* () {
 router.get('/logout', function* () {
 	this.cookies.set("loggedIn", "bye", {expires : new Date()});
 	this.redirect('/');
+})
+
+//Testing route. comment out for production.
+router.get('/test', function* (){
+	console.log(yield getBooking(1,304450));
 })
 
 module.exports = router;
