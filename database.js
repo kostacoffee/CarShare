@@ -86,3 +86,33 @@ global.getBookingHistory = function(memberNo){
 	});
 }
 
+global.getCarBay = function(id){
+	// Slightly more complex example here
+	var bayData;
+	return global.db.one("SELECT * from CarBay WHERE bayid=$1", id)
+	.then(function(data){
+		bayData = data;
+		return global.db.many("SELECT * from Car where parkedAt=$1", id);
+	})
+	.then(function(carData){
+		bayData.cars = carData;
+		return bayData;
+	})
+	.catch(function(error){
+		console.log(error);
+		return null;
+	});
+}
+
+global.getCar = function(regno){
+	regno = regno.toUpperCase();
+	//TODO Extract times available for current day
+	return global.db.one("SELECT * from Car where regno=$1", regno)
+		.then(function(data){
+			return data;
+		})
+		.catch(function(error){
+			return null;
+		});
+}
+

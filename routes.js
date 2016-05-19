@@ -47,7 +47,6 @@ function login_required(routeFunction){
 			yield routeFunction;
 		else
 			yield failed_auth;
-		
 	}
 	return inner;
 }
@@ -59,12 +58,7 @@ router.get('/', function* (){
 
 router.get('/home', login_required(function* (){
 	var nickname = this.cookies.get("loggedIn");
-	var member = yield getMember("memes");
-	if (member == null){
-		console.log(member);
-		this.redirect('/');
-		return;
-	}
+	var member = yield getMember(nickname);
 	yield this.render('home', {member : member})
 }));
 
@@ -74,12 +68,6 @@ router.post('/login', function* () {
 
 	var member = yield getMember(nickname);
 
-	if (member == null){
-		console.log('member cant be found');
-		this.redirect('/');
-		return;
-	}	
-
 	var passwordHash = getHash(password, member.pw_salt);
 	if (passwordHash == member.password){
 		this.cookies.set("loggedIn", member.nickname);
@@ -88,7 +76,29 @@ router.post('/login', function* () {
 	else
 		this.redirect('/');
 });
-	
+
+router.get('/booking/:id', login_required(function* (){
+	var nickname = this.cookies.get("loggedIn");
+	var member = yield getMember(nickname);
+	var booking = yield getBooking(member.memberno, this.params.id);
+	console.log(booking);
+	//TODO
+}));
+
+router.get('/carbay/:id', login_required(function* (){
+	var nickname = this.cookies.get("loggedIn");
+	var member = yield getMember(nickname);
+	var carBay = yield getCarBay(this.params.id);
+	console.log(carBay);
+	//TODO
+}));
+
+router.get('/car/:regno', login_required(function*(){
+	var nickname = this.cookies.get("loggedIn");
+	var member = yield getMember(nickname);
+	var car = yield getCar(this.params.regno);
+	console.log(car);
+}))
 
 router.get('/logout', function* () {
 	this.cookies.set("loggedIn", "bye", {expires : new Date()});
