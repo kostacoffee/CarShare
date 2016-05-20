@@ -51,20 +51,6 @@ router.get('/', function* (){
 	yield this.render('index');
 });
 
-router.get('/home', login_required(function* (){
-	var nickname = this.cookies.get("loggedIn");
-	var member = yield getMember(nickname)
-	.then(function(data){
-		return data;
-	})
-	.catch(function(erorr){
-		return null;
-	});
-	if (member == null)
-		this.redirect('/');
-	yield this.render('home', {member : member})
-}));
-
 router.post('/login', function* () {
 	var nickname = this.request.body.nickname.trim();
 	var password = this.request.body.password;
@@ -91,6 +77,20 @@ router.post('/login', function* () {
 	else
 		this.redirect('/');
 });
+
+router.get('/home', login_required(function* (){
+	var nickname = this.cookies.get("loggedIn");
+	var member = yield getMember(nickname)
+	.then(function(data){
+		return data;
+	})
+	.catch(function(erorr){
+		return null;
+	});
+	if (member == null)
+		this.redirect('/');
+	yield this.render('home', {member : member})
+}));
 
 router.get('/bookingHistory', login_required(function* () {
 	var nickname = this.cookies.get("loggedIn");
