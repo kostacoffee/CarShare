@@ -64,6 +64,21 @@ global.getBooking = function(memberNo, bookingID){
 	});
 }
 
+global.makeBooking = function(car, member, startDate, endDate){
+	var id;
+	return global.db.query("INSERT INTO booking (car, madeby, starttime, endtime) VALUES($1, $2, $3, $4) returning bookingid", [car, member, startDate, endDate])
+	.then(function(data){
+		id = data;
+		return global.db.query("UPDATE member SET stat_nrofbookings = stat_nrofbookings+1 where memberNo=$1", member);
+	})
+	.then(function(){
+		return id;
+	})
+	.catch(function(error){
+		return null;
+	})
+}
+
 global.adminGetBooking = function(bookingID){
 	var query = "SELECT c.name, c.regno, cb.name, b.startTime::DATE, EXTRACT(HOUR FROM b.startTime), b.endTime::DATE, EXTRACT(HOUR FROM b.endTime), b.whenBooked FROM Booking AS b INNER JOIN Car AS c ON b.car = c.regno INNER JOIN CarBay AS cb ON c.parkedAt = cb.bayID WHERE b.bookingID = $1;";
 	return global.db.one(query, bookingID)
@@ -104,6 +119,16 @@ global.getCarBay = function(id){
 	});
 }
 
+global.getCarAvailabilities = function(regno, date){
+	return global.db.any("SELECT extract(hour from starttime) as start, extract(hour from endtime) as end from Booking where car=$1 and starttime::date=$2::date", [regno, date])
+	.then(function(data){
+		return data;
+	})
+	.catch(function(error){
+		return error;
+	})
+}
+
 global.getCar = function(regno){
 	var car;
 	regno = regno.toUpperCase();
@@ -111,7 +136,7 @@ global.getCar = function(regno){
 	return global.db.one("SELECT * from Car where regno=$1", regno)
 		.then(function(data){
 			car = data;
-			return global.db.any("SELECT extract(hour from starttime) as start, extract(hour from endtime) as end from Booking where car=$1 and starttime::date=NOW()::date", regno);
+			return global.getCarAvailabilities(regno, new Date());
 		})
 		.then(function(data){
 			var available = new Array(24).fill(true);
@@ -127,4 +152,3 @@ global.getCar = function(regno){
 			return null;
 		});
 }
-

@@ -93,6 +93,33 @@ router.get('/booking/:id', login_required(function* (){
 	//TODO
 }));
 
+router.get('/newBooking', login_required(function* (){
+	var nickname = this.cookies.get("loggedIn");
+	var member = yield getMember(nickname);
+	//TODO
+}));
+
+router.post('/newBooking', login_required(function* (){
+	var nickname = this.cookies.get("loggedIn");
+	var member = yield getMember(nickname);
+	var car = this.params.car;
+	var start = new Date(this.params.startDate);
+	var end = new Date(this.params.endDate);
+	var availabilities = yield getCarAvailabilities(car, start);
+	for (var i = start.getHours(); i < end.getHours; i++){
+		if (availabilities[i] == false){
+			this.redirect('/newBooking');
+			return;
+		}
+	}
+	var bookingId = yield makeBooking(car, member.memberno, start, end);
+	if (bookingId == null){
+		this.redirect('/newBooking');
+		return;
+	}
+	this.redirect('/booking/'+bookingId);
+}));
+
 router.get('/carbay/:id', login_required(function* (){
 	var nickname = this.cookies.get("loggedIn");
 	var member = yield getMember(nickname);
