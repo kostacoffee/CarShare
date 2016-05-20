@@ -5,13 +5,8 @@
 	global.<functionName> = function(<any input data>){
 		var query = "<SQL query>";
 		return global.db.many(query)
-		.then(function(data){
-			return data;
-		})
-		.catch(function(error){
-			return null;
-		});
 	}
+
 
 	For a more indepth look, consider using:
 		global.db.one <- expects exactly one row. 
@@ -25,12 +20,6 @@ global.getMember = function(nickname) {
 	nickname = nickname.toLowerCase();
 	var query = "SELECT * FROM Member where LOWER(nickname)=$1 or LOWER(email)=$1";
 	return global.db.one(query, nickname)
-	.then(function(data){
-		return data;
-	})
-	.catch(function(error){
-		return null;
-	});
 }
 
 global.makeBooking = function(car, member, startDate, endDate){
@@ -52,25 +41,13 @@ global.makeBooking = function(car, member, startDate, endDate){
 global.getBooking = function(memberNo, bookingID){
 	var query = "SELECT c.name as car, c.regno as regno, cb.name as bay, b.startTime as start, EXTRACT(HOUR FROM b.startTime), b.endTime as end, EXTRACT(HOUR FROM b.endTime), b.whenBooked FROM Booking AS b INNER JOIN Car AS c ON b.car = c.regno INNER JOIN CarBay AS cb ON c.parkedAt = cb.bayID WHERE b.madeBy = $1 AND b.bookingID = $2";
 	return global.db.one(query, [memberNo, bookingID])
-	.then(function(data){
-		return data;
-	})
-	.catch(function(){
-		return null;
-	});
 }
 
 global.adminGetBooking = function(bookingID){
 	var query = "SELECT c.name as car, c.regno as regno, cb.name as bay, b.startTime as start, EXTRACT(HOUR FROM b.startTime), b.endTime as end, EXTRACT(HOUR FROM b.endTime), b.whenBooked FROM Booking AS b INNER JOIN Car AS c ON b.car = c.regno INNER JOIN CarBay AS cb ON c.parkedAt = cb.bayID WHERE b.bookingID = $1";
 	return global.db.one(query, bookingID)
-	.then(function(data){
-		return data;
-	})
-	.catch(function(error){
-		console.log(error);
-		return null;
-	});
 }
+
 global.getBookingHistory = function(memberNo){
 	var query = "SELECT b.bookingID as id, c.name AS car, c.regno AS regno, b.startTime::DATE AS date, EXTRACT(HOUR FROM b.endTime - b.startTime) AS length FROM Booking AS b INNER JOIN Car AS c ON b.car = c.regno WHERE madeBy = $1 ORDER BY b.startTime DESC;";
 	return global.db.many(query, memberNo);
@@ -83,12 +60,6 @@ global.makeBooking = function(regno, memberNo, startTime, endTime){
 
 global.getCarAvailabilities = function(regno, date){
 	return global.db.any("SELECT extract(hour from starttime) as start, extract(hour from endtime) as end from Booking where car=$1 and starttime::date=$2::date", [regno, date])
-	.then(function(data){
-		return data;
-	})
-	.catch(function(error){
-		return error;
-	})
 }
 
 global.getCar = function(regno){

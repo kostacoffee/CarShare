@@ -9,11 +9,8 @@ require('./database.js');
 	You will find many different functions inside database.js
 	These functions DO NOT RETURN DATA. They return Promises.
 
-	To use a promise, follow this pattern:
+	To get data *out* of a promise, follow this pattern:
 	var data = yield <database.js function>(<any parameters needed>)
-
-	In some cases, like an INSERT query, you do not expect data back,
-	so leave so you do not need to 'return data'. A good example can be seen on the POST /login route.
 
 	Routes requiring a logged in member
 	In order to enforce a user to log in before seeing a particular part of the website, you can use the
@@ -169,4 +166,5 @@ router.get('/logout', login_required(function* () {
 	this.redirect('/');
 }));
 
+//Don't touch
 module.exports = router;
