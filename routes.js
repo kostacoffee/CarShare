@@ -97,8 +97,10 @@ router.get('/bookingHistory', login_required(function* () {
 router.get('/booking/:id', login_required(function* (){
 	var nickname = this.cookies.get("loggedIn");
 	var member = yield getMember(nickname);
+	// use adminGetBooking for testing.
 	var booking = yield getBooking(member.memberno, this.params.id);
 	console.log(booking);
+	yield this.render('bookingDetails', {booking : booking});
 	//TODO
 }));
 
