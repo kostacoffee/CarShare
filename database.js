@@ -4,11 +4,7 @@
 
 	global.<functionName> = function(<any input data>){
 		var query = "<SQL query>";
-		return global.db.many(query).then(function(data){
-			return data;
-		}).catch(function(){
-			return null;
-		});
+		return global.db.many(query);
 	}
 
 	For example:
@@ -33,8 +29,6 @@
 			<do things with data>
 
 			return data;
-		}).catch(function(){
-			return null;
 		});
 	}
 
@@ -45,86 +39,59 @@
 global.getMember = function(nickname) {
 	nickname = nickname.toLowerCase();
 	var query = "SELECT * FROM Member where LOWER(nickname)=$1 or LOWER(email)=$1";
-	return global.db.one(query, nickname)
-	.then(function(data){
-		return data;
-	}).catch(function(){
-		return null;
-	});
+	return global.db.one(query, nickname);
 }
 
-global.getBooking = function(memberNo, bookingID){
-	var query = "SELECT c.name, c.regno, cb.name, b.startTime::DATE, EXTRACT(HOUR FROM b.startTime), b.endTime::DATE, EXTRACT(HOUR FROM b.endTime), b.whenBooked FROM Booking AS b INNER JOIN Car AS c ON b.car = c.regno INNER JOIN CarBay AS cb ON c.parkedAt = cb.bayID WHERE b.madeBy = $1 AND b.bookingID = $2;";
-	return global.db.one(query, [memberNo, bookingID])
-	.then(function(data){
-		return data;
-	})
-	.catch(function(){
-		return null;
-	});
-}
+/*
+	Booking functions. makeBooking and incrementBookings should be combined into a single transaction
+*/
+	global.getCar = function(car) {
+		car = car.toLowerCase();
+		var query = "SELECT * FROM Car where LOWER(name) LIKE $1";
+		return global.db.one(query, car);
+	}
 
-global.adminGetBooking = function(bookingID){
-	var query = "SELECT c.name, c.regno, cb.name, b.startTime::DATE, EXTRACT(HOUR FROM b.startTime), b.endTime::DATE, EXTRACT(HOUR FROM b.endTime), b.whenBooked FROM Booking AS b INNER JOIN Car AS c ON b.car = c.regno INNER JOIN CarBay AS cb ON c.parkedAt = cb.bayID WHERE b.bookingID = $1;";
-	return global.db.one(query, bookingID)
-	.then(function(data){
-		return data;
-	})
-	.catch(function(){
-		return null;
-	});
-}
+	//Given a Booking ID, this will display the car details, bay (currently just the name), booked period (currently, date and hour of start and end times), and time of booking (timestamp) IF AND ONLY IF the querying user (memberNo) made that booking.
+	global.getBooking = function(memberNo, bookingID){
+		var query = "SELECT c.name AS car, c.regno AS regno, cb.name AS bay, b.startTime AS start, EXTRACT(HOUR FROM b.endTime - b.startTime) AS length, b.whenBooked AS booked FROM Booking AS b INNER JOIN Car AS c ON b.car = c.regno INNER JOIN CarBay AS cb ON c.parkedAt = cb.bayID WHERE b.madeBy = $1 AND b.bookingID = $2;";
+		return global.db.one(query, [memberNo, bookingID]);
+	}
 
-global.getBookingHistory = function(memberNo){
-	var query = "SELECT c.name, c.regno, b.startTime::DATE, EXTRACT(HOUR FROM b.endTime - b.startTime) FROM Booking AS b INNER JOIN Car AS c ON b.car = c.regno WHERE madeBy = $1 ORDER BY b.startTime DESC;";
-	return global.db.many(query, memberNo)
-	.then(function(data){
-		return data;
-	})
-	.catch(function(){
-		return null;
-	});
-}
+	//Given a memberNo, this will display the car details, reserved date (this assumes 'reserved date' is 'date of startTime'), and duration (currently in hours) of every booking made by that member in reverse chronological order.
+	global.getBookingHistory = function(memberNo){
+		var query = "SELECT b.bookingID as id, c.name AS car, c.regno AS regno, b.startTime::DATE AS date, EXTRACT(HOUR FROM b.endTime - b.startTime) AS length FROM Booking AS b INNER JOIN Car AS c ON b.car = c.regno WHERE madeBy = $1 ORDER BY b.startTime DESC;";
+		return global.db.many(query, memberNo);
+	}
+	
+	global.checkBookingClash = function(regno, startTime, endTime){
+		var query = "SELECT * FROM Booking WHERE Car LIKE $1 AND (startTime, endTime) OVERLAPS (TIMESTAMP $2, TIMESTAMP $3);";
+		return global.db.none(query, [regno, startTime, endTime]);
+	}
 
-global.getCarBay = function(id){
-	// Slightly more complex example here
-	var bayData;
-	return global.db.one("SELECT * from CarBay WHERE bayid=$1", id)
-	.then(function(data){
-		bayData = data;
-		return global.db.many("SELECT * from Car where parkedAt=$1", id);
-	})
-	.then(function(carData){
-		bayData.cars = carData;
-		return bayData;
-	})
-	.catch(function(error){
-		console.log(error);
-		return null;
-	});
-}
+	/*
+	global.makeBooking = function(regno, memberNo, startTime, endTime){
+		var query = "INSERT INTO Booking (car, madeBy, whenBooked, startTime, endTime) VALUES ($1, $2, CURRENT_TIMESTAMP, $3, $4);";
+		return global.db.none(query, [regno, memberNo, startTime, endTime]);
+	}
 
-global.getCar = function(regno){
-	var car;
-	regno = regno.toUpperCase();
-	//TODO Extract times available for current day
-	return global.db.one("SELECT * from Car where regno=$1", regno)
-		.then(function(data){
-			car = data;
-			return global.db.any("SELECT extract(hour from starttime) as start, extract(hour from endtime) as end from Booking where car=$1 and starttime::date=NOW()::date", regno);
-		})
-		.then(function(data){
-			var available = new Array(24).fill(true);
-			for (var i = 0; i < data.length; i++){
-				for (var h = data[i].start; h < data[i].end; h++)
-					available[h] = false;
-			}
-			car.availabilities = available;
-			return car;
-		})
-		.catch(function(error){
-			console.log(error);
-			return null;
-		});
-}
+	global.incrementBookings = function(memberNo){
+		var query = "UPDATE Member SET stat_nrOfBookings = stat_nrOfBookings + 1 WHERE memberNo = $1;";
+		global.db.query(query, memberNo);
+	}
+	*/
 
+	//I really hope there is a better way to do this, but I have yet to find one.
+	global.getHourDifference = function(startTime, endTime){
+		var query = "SELECT EXTRACT(EPOCH FROM (TIMESTAMP $2 - TIMESTAMP $1))/3600 AS hour;";
+		return global.db.one(query, [startTime, endTime]);
+	}
+
+	global.getHourlyRate = function(memberNo){
+		var query = "SELECT hourly_rate AS rate FROM Member INNER JOIN MembershipPlan ON subscribed = title WHERE memberNo = $1;";
+		return global.db.one(query, [memberNo]);
+	}
+
+	global.getDailyRate = function(memberNo){
+		var query = "SELECT daily_rate AS rate FROM Member INNER JOIN MembershipPlan ON subscribed = title WHERE memberNo = $1;";
+		return global.db.one(query, [memberNo]);
+	}
