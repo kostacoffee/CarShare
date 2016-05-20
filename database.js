@@ -101,6 +101,24 @@ global.getCar = function(regno){
 		});
 }
 
+global.getCarBay = function(id){
+	// Slightly more complex example here
+ 	var bayData;
+ 	return global.db.one("SELECT * from CarBay WHERE bayid=$1", id)
+ 	.then(function(data){
+		bayData = data;
+		return global.db.many("SELECT * from Car where parkedAt=$1", id);
+	})
+	.then(function(carData){
+		bayData.cars = carData;
+		return bayData;
+	})
+	.catch(function(error){
+		console.log(error);
+		return null;
+	});
+}
+
 global.incrementBookings = function(memberNo){
 	var query = "UPDATE Member SET stat_nrOfBookings = stat_nrOfBookings + 1 WHERE memberNo = $1;";
 	global.db.query(query, memberNo);

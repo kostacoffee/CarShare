@@ -56,12 +56,6 @@ router.post('/login', function* () {
 	var password = this.request.body.password;
 
 	var member = yield getMember(nickname)
-	.then( function(data){
-		return data;
-	})
-	.catch(function(error){
-		return null;
-	});
 
 	if (member == null){
 		console.log('member cant be found');
@@ -81,12 +75,6 @@ router.post('/login', function* () {
 router.get('/home', login_required(function* (){
 	var nickname = this.cookies.get("loggedIn");
 	var member = yield getMember(nickname)
-	.then(function(data){
-		return data;
-	})
-	.catch(function(erorr){
-		return null;
-	});
 	if (member == null)
 		this.redirect('/');
 	yield this.render('home', {member : member})
@@ -95,12 +83,6 @@ router.get('/home', login_required(function* (){
 router.get('/bookingHistory', login_required(function* () {
 	var nickname = this.cookies.get("loggedIn");
 	var member = yield getMember(nickname)
-	.then(function(data){
-		return data;
-	})
-	.catch(function(error){
-		return null;
-	});
 
 	if (member == null){
 		console.log('member cant be found');
@@ -109,10 +91,6 @@ router.get('/bookingHistory', login_required(function* () {
 	}
 
 	var history = yield getBookingHistory(member.memberno)
-	.then(function(data){
-		return data;
-	})
-
 	yield this.render('bookingHistory', {member : member, history : history});
 }));
 
@@ -159,6 +137,13 @@ router.post('/newBooking', login_required(function* (){
 		rate = yield getDailyRate(member.memberno);
 	var estimate = hours.hour*rate.rate;
 	this.redirect('/booking/'+bookingId);
+}));
+
+router.get('/carbay', login_required(function*(){
+	var nickname = this.cookies.get("loggedIn");
+	var member = yield getMember(nickname);
+	var carbays = yield getAllCarBays();
+	//TODO
 }));
 
 router.get('/carbay/:id', login_required(function* (){
