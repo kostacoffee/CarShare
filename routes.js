@@ -99,7 +99,8 @@ router.get('/booking/:id', login_required(function* (){
 	var member = yield getMember(nickname);
 	// use adminGetBooking for testing.
 	var booking = yield getBooking(member.memberno, this.params.id);
-	console.log(booking);
+	booking.length = booking.end.getHours() - booking.start.getHours();
+	console.log(member);
 	yield this.render('bookingDetails', {booking : booking});
 	//TODO
 }));

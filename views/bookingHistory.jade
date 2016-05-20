@@ -5,4 +5,6 @@ block content
 	p You've made a total of #{member.stat_nrofbookings} bookings!
 	ul
 		each entry in history
-			li= entry.id + ' ' + entry.car + ' ' + entry.regno + ' ' + entry.date + ' ' + entry.length
+			a(href='/booking/#{entry.id}')
+				li= entry.id + ' ' + entry.car + ' ' + entry.regno + ' ' + entry.date + ' ' + entry.length
+
