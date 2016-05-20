@@ -11,12 +11,6 @@ require('./database.js');
 
 	To use a promise, follow this pattern:
 	var data = yield <database.js function>(<any parameters needed>)
-		.then( function(data){
-			return data;
-		})
-		.catch( function(error){
-			<do what you need to do if the database gives an error.>
-		});
 
 	In some cases, like an INSERT query, you do not expect data back,
 	so leave so you do not need to 'return data'. A good example can be seen on the POST /login route.
@@ -47,24 +41,27 @@ function login_required(routeFunction){
 			yield routeFunction;
 		else
 			yield failed_auth;
+		
 	}
 	return inner;
 }
 
 router.get('/', function* (){
 	this.status = 200;
-	var nickname = this.cookies.get("loggedIn");
-	if (nickname != null){
-		var member = yield getMember(nickname);
-		if (member != null)
-			this.redirect('/home');
-	}
 	yield this.render('index');
 });
 
 router.get('/home', login_required(function* (){
 	var nickname = this.cookies.get("loggedIn");
-	var member = yield getMember(nickname);
+	var member = yield getMember(nickname)
+	.then(function(data){
+		return data;
+	})
+	.catch(function(erorr){
+		return null;
+	});
+	if (member == null)
+		this.redirect('/');
 	yield this.render('home', {member : member})
 }));
 
@@ -72,9 +69,19 @@ router.post('/login', function* () {
 	var nickname = this.request.body.nickname.trim();
 	var password = this.request.body.password;
 
-	var member = yield getMember(nickname);
-	if (member == null)
+	var member = yield getMember(nickname)
+	.then( function(data){
+		return data;
+	})
+	.catch(function(error){
+		return null;
+	});
+
+	if (member == null){
+		console.log('member cant be found');
 		this.redirect('/');
+		return;
+	}
 
 	var passwordHash = getHash(password, member.pw_salt);
 	if (passwordHash == member.password){
@@ -105,18 +112,28 @@ router.post('/newBooking', login_required(function* (){
 	var car = this.params.car;
 	var start = new Date(this.params.startDate);
 	var end = new Date(this.params.endDate);
+	// TODO Client-side verification for start and end times being on the same date.
+	var duration = end.getHours() - start.getHours();
 	var availabilities = yield getCarAvailabilities(car, start);
-	for (var i = start.getHours(); i < end.getHours; i++){
+	for (var i = start.getHours(); i < end.getHours(); i++){
 		if (availabilities[i] == false){
 			this.redirect('/newBooking');
 			return;
 		}
 	}
+
 	var bookingId = yield makeBooking(car, member.memberno, start, end);
 	if (bookingId == null){
 		this.redirect('/newBooking');
 		return;
 	}
+
+	var rate;
+	if (duration < 12)
+		rate = yield getHourlyRate(member.memberno);
+	else
+		rate = yield getDailyRate(member.memberno);
+	var estimate = hours.hour*rate.rate;
 	this.redirect('/booking/'+bookingId);
 }));
 
@@ -135,14 +152,33 @@ router.get('/car/:regno', login_required(function*(){
 	console.log(car);
 }))
 
-router.get('/logout', function* () {
+router.get('/logout', login_required(function* () {
 	this.cookies.set("loggedIn", "bye", {expires : new Date()});
 	this.redirect('/');
-})
+}));
 
-//Testing route. comment out for production.
-router.get('/test', function* (){
-	console.log(yield getBooking(1,304450));
-})
+router.get('/bookingHistory', login_required(function* () {
+	var nickname = this.cookies.get("loggedIn");
+	var member = yield getMember(nickname)
+	.then(function(data){
+		return data;
+	})
+	.catch(function(error){
+		return null;
+	});
+
+	if (member == null){
+		console.log('member cant be found');
+		this.redirect('/');
+		return;
+	}
+
+	var history = yield getBookingHistory(member.memberno)
+	.then(function(data){
+		return data;
+	})
+
+	yield this.render('bookingHistory', {member : member, history : history});
+}));
 
 module.exports = router;

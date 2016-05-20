@@ -3,3 +3,6 @@ block content
 	h2 Welcome #{member.nametitle} #{member.namegiven} #{member.namefamily}
 	p Your current membership plan is: #{member.subscribed}
 	p You've made a total of #{member.stat_nrofbookings} bookings!
+	ul
+		each entry in history
+			li= entry.id

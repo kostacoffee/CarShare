@@ -4,41 +4,20 @@
 
 	global.<functionName> = function(<any input data>){
 		var query = "<SQL query>";
-		return global.db.many(query).then(function(data){
+		return global.db.many(query)
+		.then(function(data){
 			return data;
-		}).catch(function(){
+		})
+		.catch(function(error){
 			return null;
 		});
 	}
-
-	For example:
-	
-	global.getMembers = function() {
-	return global.db.many("SELECT email FROM Member")
-	};
-
 
 	For a more indepth look, consider using:
 		global.db.one <- expects exactly one row. 
 		global.db.none <- expects absolutely nothing.
 							If a row is found, the promise
 							falls back to 'catch'.
-
-	If you need to edit the data that comes out of the query, follow this:
-	
-	global.<functionName> = function(<any input data>){
-		var query = "<SQL query>";
-		return global.db.many(query, <any input data>)
-		.then(function (data){
-			<do things with data>
-
-			return data;
-		}).catch(function(){
-			return null;
-		});
-	}
-
-
 */
 
 
@@ -48,18 +27,8 @@ global.getMember = function(nickname) {
 	return global.db.one(query, nickname)
 	.then(function(data){
 		return data;
-	}).catch(function(){
-		return null;
-	});
-}
-
-global.getBooking = function(memberNo, bookingID){
-	var query = "SELECT c.name, c.regno, cb.name, b.startTime::DATE, EXTRACT(HOUR FROM b.startTime), b.endTime::DATE, EXTRACT(HOUR FROM b.endTime), b.whenBooked FROM Booking AS b INNER JOIN Car AS c ON b.car = c.regno INNER JOIN CarBay AS cb ON c.parkedAt = cb.bayID WHERE b.madeBy = $1 AND b.bookingID = $2;";
-	return global.db.one(query, [memberNo, bookingID])
-	.then(function(data){
-		return data;
 	})
-	.catch(function(){
+	.catch(function(error){
 		return null;
 	});
 }
@@ -89,34 +58,14 @@ global.adminGetBooking = function(bookingID){
 		return null;
 	});
 }
-
 global.getBookingHistory = function(memberNo){
-	var query = "SELECT c.name, c.regno, b.startTime::DATE, EXTRACT(HOUR FROM b.endTime - b.startTime) FROM Booking AS b INNER JOIN Car AS c ON b.car = c.regno WHERE madeBy = $1 ORDER BY b.startTime DESC;";
-	return global.db.many(query, memberNo)
-	.then(function(data){
-		return data;
-	})
-	.catch(function(){
-		return null;
-	});
+	var query = "SELECT b.bookingID as id, c.name AS car, c.regno AS regno, b.startTime::DATE AS date, EXTRACT(HOUR FROM b.endTime - b.startTime) AS length FROM Booking AS b INNER JOIN Car AS c ON b.car = c.regno WHERE madeBy = $1 ORDER BY b.startTime DESC;";
+	return global.db.many(query, memberNo);
 }
-
-global.getCarBay = function(id){
-	// Slightly more complex example here
-	var bayData;
-	return global.db.one("SELECT * from CarBay WHERE bayid=$1", id)
-	.then(function(data){
-		bayData = data;
-		return global.db.many("SELECT * from Car where parkedAt=$1", id);
-	})
-	.then(function(carData){
-		bayData.cars = carData;
-		return bayData;
-	})
-	.catch(function(error){
-		console.log(error);
-		return null;
-	});
+	
+global.makeBooking = function(regno, memberNo, startTime, endTime){
+	var query = "INSERT INTO Booking (car, madeBy, whenBooked, startTime, endTime) VALUES ($1, $2, CURRENT_TIMESTAMP, $3, $4);";
+	return global.db.none(query, [regno, memberNo, startTime, endTime]);
 }
 
 global.getCarAvailabilities = function(regno, date){
@@ -132,7 +81,6 @@ global.getCarAvailabilities = function(regno, date){
 global.getCar = function(regno){
 	var car;
 	regno = regno.toUpperCase();
-	//TODO Extract times available for current day
 	return global.db.one("SELECT * from Car where regno=$1", regno)
 		.then(function(data){
 			car = data;
@@ -151,4 +99,19 @@ global.getCar = function(regno){
 			console.log(error);
 			return null;
 		});
+}
+
+global.incrementBookings = function(memberNo){
+	var query = "UPDATE Member SET stat_nrOfBookings = stat_nrOfBookings + 1 WHERE memberNo = $1;";
+	global.db.query(query, memberNo);
+}
+
+global.getHourlyRate = function(memberNo){
+	var query = "SELECT hourly_rate AS rate FROM Member INNER JOIN MembershipPlan ON subscribed = title WHERE memberNo = $1;";
+	return global.db.one(query, [memberNo]);
+}
+
+global.getDailyRate = function(memberNo){
+	var query = "SELECT daily_rate AS rate FROM Member INNER JOIN MembershipPlan ON subscribed = title WHERE memberNo = $1;";
+	return global.db.one(query, [memberNo]);
 }
