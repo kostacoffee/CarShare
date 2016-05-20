@@ -105,13 +105,25 @@ global.getCarBay = function(id){
 }
 
 global.getCar = function(regno){
+	var car;
 	regno = regno.toUpperCase();
 	//TODO Extract times available for current day
 	return global.db.one("SELECT * from Car where regno=$1", regno)
 		.then(function(data){
-			return data;
+			car = data;
+			return global.db.any("SELECT extract(hour from starttime) as start, extract(hour from endtime) as end from Booking where car=$1 and starttime::date=NOW()::date", regno);
+		})
+		.then(function(data){
+			var available = new Array(24).fill(true);
+			for (var i = 0; i < data.length; i++){
+				for (var h = data[i].start; h < data[i].end; h++)
+					available[h] = false;
+			}
+			car.availabilities = available;
+			return car;
 		})
 		.catch(function(error){
+			console.log(error);
 			return null;
 		});
 }
