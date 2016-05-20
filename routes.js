@@ -92,6 +92,30 @@ router.post('/login', function* () {
 		this.redirect('/');
 });
 
+router.get('/bookingHistory', login_required(function* () {
+	var nickname = this.cookies.get("loggedIn");
+	var member = yield getMember(nickname)
+	.then(function(data){
+		return data;
+	})
+	.catch(function(error){
+		return null;
+	});
+
+	if (member == null){
+		console.log('member cant be found');
+		this.redirect('/');
+		return;
+	}
+
+	var history = yield getBookingHistory(member.memberno)
+	.then(function(data){
+		return data;
+	})
+
+	yield this.render('bookingHistory', {member : member, history : history});
+}));
+
 router.get('/booking/:id', login_required(function* (){
 	var nickname = this.cookies.get("loggedIn");
 	var member = yield getMember(nickname);
@@ -155,30 +179,6 @@ router.get('/car/:regno', login_required(function*(){
 router.get('/logout', login_required(function* () {
 	this.cookies.set("loggedIn", "bye", {expires : new Date()});
 	this.redirect('/');
-}));
-
-router.get('/bookingHistory', login_required(function* () {
-	var nickname = this.cookies.get("loggedIn");
-	var member = yield getMember(nickname)
-	.then(function(data){
-		return data;
-	})
-	.catch(function(error){
-		return null;
-	});
-
-	if (member == null){
-		console.log('member cant be found');
-		this.redirect('/');
-		return;
-	}
-
-	var history = yield getBookingHistory(member.memberno)
-	.then(function(data){
-		return data;
-	})
-
-	yield this.render('bookingHistory', {member : member, history : history});
 }));
 
 module.exports = router;
