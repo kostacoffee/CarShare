@@ -1,6 +1,9 @@
 #loginCard{
 	margin : auto;
 	margin-top: 50px;
+	width: 330px;
+	padding: 2px;
+	height: 266px;
 }
 
 body{
@@ -19,9 +22,17 @@ body{
 .mdl-grid {
     display: flex !important;
 }
+#date{
+	float: left;
+	width: 45%;
+}
+#loc{
+	float: right;
+	width: 45%;
+}
 
-.mdl-card__title-text{
-	
+.mdl-card__supporting-text{
+	padding-top: 5px;
 }
 
 .mdl-card{
@@ -29,4 +40,5 @@ body{
 	flex-direction: column;
 	align-items: stretch;
 	width: auto;
+	height: 300px;
 }
