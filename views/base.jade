@@ -24,13 +24,16 @@ html
 								i.material-icons more_vert
 
 							ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect(for='menuButton')
-								li.mdl-menu__item Profile Setting
-								li.mdl-menu__item Invoices
-								li.mdl-menu__item.mdl-menu__item--full-bleed-divider Membership Details
-								li.mdl-menu__item(href='/logout') Logout
+								a(href='/profile_setting')
+									li.mdl-menu__item Profile Setting
+								a(href='/invoices')
+									li.mdl-menu__item Invoices
+								a(href='/membership_details')
+									li.mdl-menu__item.mdl-menu__item--full-bleed-divider Membership Details
+								a(href='/logout')
+									li.mdl-menu__item Logout
 								
-							a.mdl-navigation__link(href='/logout') Logout
-						a.mdl-navigation__link(href='') Link
+							
 					
 			main.mdl-layout__content
 				block content
