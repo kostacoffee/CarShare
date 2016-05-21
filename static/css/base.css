@@ -15,6 +15,7 @@ body{
 	margin-top: 15px;
 }
 
+
 .mdl-layout__container{
 	margin: 0 auto;
 	max-width: 900px;
@@ -38,6 +39,7 @@ body{
 }
 #bookingcard{
 	overflow: visible;
+	padding: 5px;
 }
 
 #addbutton{
