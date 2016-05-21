@@ -13,17 +13,17 @@ block content
 				div#bookingmain.mdl-card__supporting-text Car:
 				div.mdl-card__title
 					div.mdl-card__title-text Last Booking was...
-				div.mdl-card__supporting-text Date:
+				div.mdl-card__supporting-text Date: 
 				div.mdl-card__supporting-text Location:
 				div.mdl-card__supporting-text Car:
 		div.mdl-cell.mdl-cell--5-col
 			div#Welcome.mdl-card.mdl-color--white.mdl-shadow--2dp
 				div.mdl-card__title
 					div.mdl-card__title-text Welcome #{member.nametitle} #{member.namegiven} #{member.namefamily}
-				div.mdl-card__supporting-text Home bay:
-				div.mdl-card__supporting-text Membership Plan:
-				div.mdl-card__supporting-text Member Since:
-				div.mdl-card__supporting-text # of Bookings:
+				div.mdl-card__supporting-text Home bay: #{member.homebayname}
+				div.mdl-card__supporting-text Membership Plan: #{member.subscribed}
+				div.mdl-card__supporting-text Member Since: #{member.since}
+				div.mdl-card__supporting-text # of Bookings: #{member.stat_nrofbookings}
 				div.mdl-card__supporting-text Current Balance:
 		div.mdl-cell.mdl-cell--4-col
 			div#mediafiller.mdl-card.mdl-color--white.mdl-shadow--2dp
