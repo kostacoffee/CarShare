@@ -43,6 +43,15 @@ function login_required(routeFunction){
 	return inner;
 }
 
+function* getCost(memberno, duration){
+	var rate;
+	if (duration < 12)
+		rate = yield getHourlyRate(memberno);
+	else
+		rate = yield getDailyRate(memberno);
+	return rate.rate*duration;
+}
+
 router.get('/', function* (){
 	this.status = 200;
 	yield this.render('index');
@@ -130,12 +139,7 @@ router.post('/newBooking', login_required(function* (){
 		return;
 	}
 
-	var rate;
-	if (duration < 12)
-		rate = yield getHourlyRate(member.memberno);
-	else
-		rate = yield getDailyRate(member.memberno);
-	var estimate = hours.hour*rate.rate;
+
 	this.redirect('/booking/'+bookingId);
 }));
 
@@ -161,9 +165,38 @@ router.get('/car/:regno', login_required(function*(){
 	console.log(car);
 }))
 
+router.get('/invoice', login_required(function* (){
+	var nickname = this.cookies.get("loggedIn");
+	var member = yield getMember(nickname);
+	var invoices = yield getInvoices(member.memberno);
+	console.log(invoices);
+	//TODO invoice browser
+}))
+
+router.get('/invoice/:id', login_required(function*(){
+	var nickname = this.cookies.get("loggedIn");
+	var member = yield getMember(nickname);
+	var invoiceData = yield getInvoice(member.memberno, this.params.id);
+	console.log(invoiceData);
+	var bookingsForInvoice = yield getBookingsForInvoice(member.memberno, invoiceData.invoicedate);
+	console.log(bookingsForInvoice);
+	//TODO Invoice Details.
+}));
+
 router.get('/logout', login_required(function* () {
 	this.cookies.set("loggedIn", "bye", {expires : new Date()});
 	this.redirect('/');
+}));
+
+router.get('/test', login_required(function* (){
+	var nickname = this.cookies.get("loggedIn");
+	var member = yield getMember(nickname);
+	var bookings = yield getBookingsForInvoice(member.memberno, new Date());
+	var totalCost = 0;
+	for (var i = 0; i < bookings.length; i++){
+		totalCost += yield getCost(member.memberno, bookings[i].endtime.getHours() - bookings[i].starttime.getHours());
+	}
+	yield addInvoice(member.memberno, new Date(), totalCost);	
 }));
 
 //Don't touch

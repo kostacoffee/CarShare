@@ -117,3 +117,37 @@ global.getDailyRate = function(memberNo){
 	var query = "SELECT daily_rate AS rate FROM Member INNER JOIN MembershipPlan ON subscribed = title WHERE memberNo = $1;";
 	return global.db.one(query, [memberNo]);
 }
+
+global.getInvoice = function(memberno, invoiceid){
+	return global.db.one("SELECT invoicedate, monthlyfee, totalamount from invoice where memberno=$1 and invoiceno=$2", [memberno, invoiceid]);
+}
+
+global.getInvoices = function(memberno){
+	return global.db.any("SELECT invoiceno, invoicedate, monthlyfee, totalamount from Invoice where memberno=$1 order by invoiceno desc", memberno);
+}
+
+global.getBookingsForInvoice = function(memberno, date){
+	var startDate = new Date(date.getFullYear(), date.getMonth(), 2);
+	var endDate = new Date(date.getFullYear(), date.getMonth() + 1, 2);
+
+	var query = "SELECT bookingid, car, starttime, endtime from Booking where madeby=$1 and endtime>=$2 and endtime < $3"
+	return global.db.any(query, [memberno, startDate, endDate]);
+}
+
+global.addInvoice = function(memberno, date, cost){
+	return global.db.any("SELECT totalamount, invoiceno from Invoice where memberno=$1 order by invoiceno desc limit 1", memberno)
+	.then(function(data){
+		if (data.length == 0){
+			data.totalamount = 0;
+			data.invoiceno = 0;
+		}
+		else{
+			data.totalamount = data[0].totalamount;
+			data.invoiceno = data[0].invoiceno;
+		}
+
+		var query = "INSERT INTO Invoice(memberno, invoiceno, invoicedate, monthlyfee, totalamount) VALUES($1, $2, $3, $4, $5)";
+		return global.db.none(query, [memberno, data.invoiceno + 1, date, cost, data.totalamount + cost]);
+	});
+	
+}
