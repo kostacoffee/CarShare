@@ -20,8 +20,13 @@ body{
     display: flex !important;
 }
 
+.mdl-card__title-text{
+	
+}
+
 .mdl-card{
 	display: flex;
 	flex-direction: column;
 	align-items: stretch;
+	width: auto;
 }
