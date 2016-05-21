@@ -10,7 +10,10 @@ body{
 	background-color: #f5f5f5;
 }
 
-
+.mdl-layout__content{
+	overflow: visible;
+	margin-top: 15px;
+}
 
 .mdl-layout__container{
 	margin: 0 auto;
@@ -20,6 +23,7 @@ body{
 	left: 0;
 	right: 0;
 }
+
 
 .mdl-grid {
     display: flex !important;
@@ -31,6 +35,15 @@ body{
 #loc{
 	float: right;
 	width: 45%;
+}
+#bookingcard{
+	overflow: visible;
+}
+
+#addbutton{
+	position: absolute;
+	top: -20px;
+	right: 26px;
 }
 
 .mdl-card__supporting-text{
