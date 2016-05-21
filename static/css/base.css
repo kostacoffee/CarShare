@@ -9,13 +9,31 @@
 body{
 	background-color: #f5f5f5;
 }
+.mdl-card__media{
+	background-image: url('images/coffee.jpg');
+	box-sizing: border-box;
+    background-size: cover;
+    padding: 24px;
+	display: flex;
+	height: 270px;
+	background-color: rgb(255,171,64);
+    background-repeat: repeat;
+    background-position: 50% 50%;
+    background-size: cover;
+    background-origin: padding-box;
+    background-attachment: scroll;
+    box-sizing: border-box;
+}
+}
 
 .mdl-layout__content{
 	overflow: visible;
 	margin-top: 15px;
 }
 
-
+.mdl-layout{
+	overflow: visible;
+}
 .mdl-layout__container{
 	margin: 0 auto;
 	max-width: 900px;
