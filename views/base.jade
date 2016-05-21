@@ -20,13 +20,14 @@ html
 							a.mdl-navigation__link(href='/bookinghistory') My Bookings
 							a.mdl-navigation__link(href='/newbooking') New Booking
 							a.mdl-navigation__link(href='/carbays') CarBays
-							button.mdl-button.mdl-js-button.mdl-button--icon
-								<i class="material-icons">more_vert</i>
-							ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect
+							button#menuButton.mdl-button.mdl-js-button.mdl-button--icon
+								i.material-icons more_vert
+
+							ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect(for='menuButton')
 								li.mdl-menu__item Profile Setting
 								li.mdl-menu__item Invoices
-								li.mdl-menu__item--full-bleed-divider Membership Details
-								//- li.mdl-menu__item(href='/logout') Logout
+								li.mdl-menu__item.mdl-menu__item--full-bleed-divider Membership Details
+								li.mdl-menu__item(href='/logout') Logout
 								
 							a.mdl-navigation__link(href='/logout') Logout
 						a.mdl-navigation__link(href='') Link
