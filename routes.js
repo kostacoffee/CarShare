@@ -15,15 +15,15 @@ require('./database.js');
 	Routes requiring a logged in member
 	In order to enforce a user to log in before seeing a particular part of the website, you can use the
 	login_required function. This function takes *another function* as its parameter, which determines what
-	happens when a successfully logged in user visits the web page. 
+	happens when a successfully logged in user visits the web page.
 	See the GET /home route for an example.
 
 */
 
 function getHash(password, salt){
 	var hash = crypto.createHmac('sha512', salt);
-	hash.update(password);	
-	return hash.digest('base64');	
+	hash.update(password);
+	return hash.digest('base64');
 }
 
 function failed_auth(){
@@ -38,7 +38,7 @@ function login_required(routeFunction){
 			yield routeFunction;
 		else
 			yield failed_auth;
-		
+
 	}
 	return inner;
 }
@@ -81,6 +81,7 @@ router.post('/login', function* () {
 router.get('/home', login_required(function* (){
 	var nickname = this.cookies.get("loggedIn");
 	var member = yield getMember(nickname)
+	console.log(member);
 	if (member == null)
 		this.redirect('/');
 	yield this.render('home', {member : member})
@@ -196,7 +197,7 @@ router.get('/test', login_required(function* (){
 	for (var i = 0; i < bookings.length; i++){
 		totalCost += yield getCost(member.memberno, bookings[i].endtime.getHours() - bookings[i].starttime.getHours());
 	}
-	yield addInvoice(member.memberno, new Date(), totalCost);	
+	yield addInvoice(member.memberno, new Date(), totalCost);
 }));
 
 //Don't touch
