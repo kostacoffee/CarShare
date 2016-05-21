@@ -48,18 +48,31 @@ ul.mdl-menu a{
 
 .mdl-grid {
     display: flex !important;
+	margin-top: 10px;
 }
-#date{
+/*#date{
 	float: left;
 	width: 45%;
 }
 #loc{
 	float: right;
 	width: 45%;
-}
+}*/
 #bookingcard{
 	overflow: visible;
+
+}
+#mediafiller{
+	height: 350px;
+}
+
+#booking{
+	height: 300px;
+	overflow: visible;
 	padding: 5px;
+}
+#Welcome{
+	height: 300px;
 }
 
 #addbutton{
@@ -77,5 +90,5 @@ ul.mdl-menu a{
 	flex-direction: column;
 	align-items: stretch;
 	width: auto;
-	height: 300px;
+
 }
