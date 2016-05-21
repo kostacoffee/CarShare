@@ -1,33 +1,27 @@
 #loginCard{
 	margin : auto;
+	margin-top: 50px;
 }
+
 body{
 	background-color: #f5f5f5;
-	margin: 0;
-
-
 }
+
 .mdl-layout__container{
 	margin: 0 auto;
 	max-width: 900px;
-	padding: 0;
-	width: 100%;
-	flex-shrink: 0;
-	/*height: 100%;*/
-	position: relative;
+	margin-left: auto;
+	margin-right: auto;
+	left: 0;
+	right: 0;
 }
+
 .mdl-grid {
     display: flex !important;
 }
+
 .mdl-card{
 	display: flex;
 	flex-direction: column;
 	align-items: stretch;
-	min-height: 360px;
 }
-.footer{
-	position: bottom;
-}
-/*.mdl-cell--6-col{
-	width: calc(50% - 16px);
-}*/
