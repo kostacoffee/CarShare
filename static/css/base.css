@@ -24,7 +24,9 @@ body{
 	left: 0;
 	right: 0;
 }
-
+ul.mdl-menu a{
+	text-decoration: none;
+}
 
 .mdl-grid {
     display: flex !important;
