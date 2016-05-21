@@ -18,8 +18,21 @@
 
 global.getMember = function(nickname) {
 	nickname = nickname.toLowerCase();
+	var user;
 	var query = "SELECT * FROM Member where LOWER(nickname)=$1 or LOWER(email)=$1";
 	return global.db.one(query, nickname)
+	.then(function(data){
+		user = data;
+		return global.db.any("SELECT name from carbay where bayid=$1", user.homebay);
+	})
+	.then(function(data){
+		if (data.length == 0){
+			user.homebayName = "No Homebay";
+			user.homebay = -1;
+		}
+		user.homebayname = data[0].name;
+		return user;
+	})
 }
 
 global.makeBooking = function(car, member, startDate, endDate){
