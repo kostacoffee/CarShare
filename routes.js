@@ -115,7 +115,8 @@ router.get('/booking/:id', login_required(function* (){
 router.get('/newbooking', login_required(function* (){
 	var nickname = this.cookies.get("loggedIn");
 	var member = yield getMember(nickname);
-	yield this.render('newBooking', {member : member});
+	var availableCars = yield getAvailableCars();	
+	yield this.render('newBooking', {member : member, cars : availableCars});
 }));
 
 router.post('/newbooking', login_required(function* (){
@@ -143,31 +144,18 @@ router.post('/newbooking', login_required(function* (){
 	this.redirect('/booking/'+bookingId);
 }));
 
-router.post('/carbays', login_required(function*(){
+router.get('/carbays', login_required(function*(){
 	var nickname = this.cookies.get("loggedIn");
 	var member = yield getMember(nickname);
 
 	var results;
-	if (!this.request.body.search_string)
-	{
-		results = null;
-	}
+	console.log(this.request.body.search_string)
+	if (!this.request.body.search_string) 
+		results = [yield getCarBay(member.homebay)];
 	else
-	{
-		var search_string = this.request.body.search_string;
-		results = yield searchBays(search_string);
-	}
-	console.log(results);
+		results = yield searchBays(this.request.body.search_string);
 
-	yield this.render('searchResults', {member : member, results : results});
-}));
-
-router.get('/carbays', login_required(function*(){
-	var nickname = this.cookies.get("loggedIn");
-	var member = yield getMember(nickname);
-	var carbay = yield getCarBay(member.homebay);
-
-	yield this.render('homebay', {member : member, carbay : carbay});
+	yield this.render('carbaySearch', {member : member, results : results});
 }));
 
 router.get('/carbay/:id', login_required(function* (){
@@ -204,6 +192,8 @@ router.get('/invoice/:id', login_required(function*(){
 }));
 
 router.get('/location/:id', login_required(function*(){
+	var nickname = this.cookies.get("loggedIn");
+	var member = yield getMember(nickname);
 	var location = yield getLocation(this.params.id);
 	console.log(location);
 
@@ -219,7 +209,7 @@ router.get('/location/:id', login_required(function*(){
 	var dbays = yield getDescendantBays(this.params.id);
 	console.log(dbays);
 
-	yield this.render('locationDetails', {location : location, bays : bays, parent : parent, children : children, dbays : dbays});
+	yield this.render('locationDetails', {member : member, location : location, bays : bays, parent : parent, children : children, dbays : dbays});
 }));
 
 router.get('/logout', login_required(function* () {

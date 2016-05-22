@@ -120,6 +120,11 @@ global.getCarBay = function(id){
 	});
 }
 
+global.getAllCars = function(){
+	return global.db.many("SELECT * From Car");
+}
+
+
 global.getHourlyRate = function(memberNo){
 	var query = "SELECT hourly_rate AS rate FROM Member INNER JOIN MembershipPlan ON subscribed = title WHERE memberNo = $1;";
 	return global.db.one(query, [memberNo]);
