@@ -3,8 +3,30 @@ block content
 	h2 Welcome #{member.nametitle} #{member.namegiven} #{member.namefamily}
 	p Your current membership plan is: #{member.subscribed}
 	p You've made a total of #{member.stat_nrofbookings} bookings!
-	ul
-		each entry in history
+	//- ul
+	<table id="history" class="mdl-data-table mdl-js-data-table">
+	<thead>
+	<tr>
+	<th id="idbooking" class="mdl-data-table__cell--non-numeric">Id</th>
+	<th id="carbooking">Car</th>
+	<th id="regnobooking">Regno</th>
+	<th id="datebooking">Date</th>
+	<th id="lengthbooking">Length</th>
+	</tr>
+	</thead>
+	</table>
+	each entry in history	
+			<table class="mdl-data-table mdl-js-data-table">
 			a(href='/booking/#{entry.id}')
-				li= entry.id + ' ' + entry.car + ' ' + entry.regno + ' ' + entry.date + ' ' + entry.length
-
+				<tbody>
+				<tr>
+				<th id="idbooking">#{entry.id}</th>
+				<th id="carbooking">#{entry.car}</th>
+				<th id="regnobooking">#{entry.regno}</th>
+				<th id="datebooking">#{entry.date}</th>
+				<th id="lengthbooking">#{entry.length}</th>
+				</tr>
+				</tbody>
+			</table>
+			//- a(href='/booking/#{entry.id}')
+			//- 	li= entry.id + ' ' + entry.car + ' ' + entry.regno + ' ' + entry.date + ' ' + entry.length

@@ -5,6 +5,33 @@
 	padding: 2px;
 	height: 266px;
 }
+.mdl-data-table{
+	width: 900px;
+}
+
+#idbooking{
+	width: 117px;
+	text-align: left;
+}
+
+#carbooking{
+	width: 200px;
+	text-align: left;
+}
+#regnobooking{
+	width: 119px;
+	text-align: left;
+}
+#datebooking{
+	width: 394px;
+	text-align: left;
+}
+#lengthbooking{
+	width: 69px;
+	text-align: left;
+}
+
+
 
 body{
 	background-color: #f5f5f5;
