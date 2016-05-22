@@ -112,13 +112,13 @@ router.get('/booking/:id', login_required(function* (){
 	//TODO
 }));
 
-router.get('/newBooking', login_required(function* (){
+router.get('/newbooking', login_required(function* (){
 	var nickname = this.cookies.get("loggedIn");
 	var member = yield getMember(nickname);
-	//TODO
+	yield this.render('newBooking', {member : member});
 }));
 
-router.post('/newBooking', login_required(function* (){
+router.post('/newbooking', login_required(function* (){
 	var nickname = this.cookies.get("loggedIn");
 	var member = yield getMember(nickname);
 	var car = this.params.car;
@@ -166,7 +166,6 @@ router.get('/carbays', login_required(function*(){
 	var nickname = this.cookies.get("loggedIn");
 	var member = yield getMember(nickname);
 	var carbay = yield getCarBay(member.homebay);
-	console.log(carbay);
 
 	yield this.render('homebay', {member : member, carbay : carbay});
 }));
