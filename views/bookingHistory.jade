@@ -14,19 +14,16 @@ block content
 	<th id="lengthbooking">Length</th>
 	</tr>
 	</thead>
-	</table>
+	<tbody>
 	each entry in history	
-			<table class="mdl-data-table mdl-js-data-table">
-			a(href='/booking/#{entry.id}')
-				<tbody>
-				<tr>
-				<th id="idbooking">#{entry.id}</th>
-				<th id="carbooking">#{entry.car}</th>
-				<th id="regnobooking">#{entry.regno}</th>
-				<th id="datebooking">#{entry.date}</th>
-				<th id="lengthbooking">#{entry.length}</th>
-				</tr>
-				</tbody>
-			</table>
-			//- a(href='/booking/#{entry.id}')
-			//- 	li= entry.id + ' ' + entry.car + ' ' + entry.regno + ' ' + entry.date + ' ' + entry.length
+		<tr href='/booking/#{entry.id}'>
+		<td id="idbooking">#{entry.id}</td>
+		<td id="carbooking">#{entry.car}</td>
+		<td id="regnobooking">#{entry.regno}</td>
+		<td id="datebooking">#{entry.date}</td>
+		<td id="lengthbooking">#{entry.length}</td>
+		</tr>
+	</tbody>
+	</table>
+//- a(href='/booking/#{entry.id}')
+//- 	li= entry.id + ' ' + entry.car + ' ' + entry.regno + ' ' + entry.date + ' ' + entry.length
