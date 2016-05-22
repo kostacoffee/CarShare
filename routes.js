@@ -115,7 +115,7 @@ router.get('/booking/:id', login_required(function* (){
 router.get('/newbooking', login_required(function* (){
 	var nickname = this.cookies.get("loggedIn");
 	var member = yield getMember(nickname);
-	var availableCars = yield getAvailableCars();	
+	var availableCars = yield getAllCars();	
 	yield this.render('newBooking', {member : member, cars : availableCars});
 }));
 
