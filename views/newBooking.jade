@@ -1,2 +1,29 @@
+extends ./base.jade
 block content
+	div.mdl-cell.mdl-cell--12-col.mdl-card.mdl-shadow--4dp
+		div.mdl-card__title
+			div.mdl-card__title-text New Booking
+		div#mediafillernew.mdl-card__media 
+		div#bookinginfo.mdl-card__supporting-text Welcome! We are so happy that you would like to book with PeerCar!
+			p To make a booking, please fill out the following form:
+		form(id='carform', method='post', action='/newbooking')
+			div.mdl-card__supporting-text
+					
+					//- div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+					//- 	select(name="regnolist" form="carform")
+					//- 		<option value="#{entry.regno}">m#{entry.regno}</option>
+					//- 	//- input#nickname.mdl-textfield__input(name='Car', type='select')
+					//- 	//- label.mdl-textfield__label(for='Car') Car
+
+					div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+						input#password.mdl-textfield__input(name='Start', type='datetime-local')
+						label.mdl-textfield__label(for='Start') Start Time
+					
+					div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+						input#password.mdl-textfield__input(name='End', type='datetime-local')
+						label.mdl-textfield__label(for='End') End Time
+
+
+					div.mdl-card-actions.mdl-card--border
+						input.mdl-button.mdl-js-button.mdl-button-primary(type='submit', name='Log In' )
 	
