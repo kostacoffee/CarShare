@@ -184,6 +184,25 @@ router.get('/invoice/:id', login_required(function*(){
 	//TODO Invoice Details.
 }));
 
+router.get('/location/:id', login_required(function*(){
+	var location = yield getLocation(this.params.id);
+	console.log(location);
+
+	var bays = yield getCarBayAt(this.params.id);
+	console.log(bays);
+
+	var parent = yield getLocation(location.is_at);
+	console.log(parent);
+
+	var children = yield getChildren(this.params.id);
+	console.log(children);
+
+	var dbays = yield getDescendantBays(this.params.id);
+	console.log(dbays);
+
+	yield this.render('locationDetails', {location : location, bays : bays, parent : parent, children : children, dbays : dbays});
+}))
+
 router.get('/logout', login_required(function* () {
 	this.cookies.set("loggedIn", "bye", {expires : new Date()});
 	this.redirect('/');

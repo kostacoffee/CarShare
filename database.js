@@ -164,3 +164,60 @@ global.addInvoice = function(memberno, date, cost){
 	});
 	
 }
+
+global.getLocation = function(locID){
+	var query = "SELECT * FROM Location WHERE locID = $1;";
+	return global.db.one(query, locID)
+	.then(function(data){
+		return data;
+	})
+	.catch(function(error){
+		return null;
+	});
+}
+
+global.getChildren = function(locID){
+	var query = "SELECT * FROM Location WHERE is_at = $1;";
+	return global.db.many(query, locID)
+	.then(function(data){
+		return data;
+	})
+	.catch(function(error){
+		return null;
+	});
+}
+
+global.getCarBayAt = function(locID){
+	var query = "SELECT * FROM Carbay WHERE located_at = $1;";
+	return global.db.many(query, locID)
+	.then(function(data){
+		return data;
+	})
+	.catch(function(error){
+		return null;
+	});
+}
+
+global.searchLocation = function(search_string){
+	search_string = '%' + search_string.toLowerCase() + '%';
+ 	var bayData;
+ 	return global.db.many("SELECT * FROM Location WHERE LOWER(name) LIKE $1", search_string)
+	.then(function(data){
+		return data;
+	})
+	.catch(function(error){
+		console.log(error);
+		return null;
+	});
+}
+
+global.getDescendantBays = function(locID){
+	var query = "WITH RECURSIVE contains(locid, is_at) AS (SELECT locid, is_at FROM Location UNION SELECT Location.locid, contains.is_at FROM Location, contains WHERE Location.is_at = contains.locid) SELECT Carbay.* FROM contains INNER JOIN Carbay ON locID = located_at WHERE is_at = $1;";
+	return global.db.many(query, locID)
+	.then(function(data){
+		return data;
+	})
+	.catch(function(error){
+		return null;
+	});
+}

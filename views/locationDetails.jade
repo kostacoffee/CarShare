@@ -1,0 +1,32 @@
+extends ./base.jade
+block content
+	p Name #{location.name}
+	if (locals.parent)
+		a(href='/location/#{parent.locid}')
+			p Child of #{parent.name}
+	else
+		p No parent
+	if (locals.bays)
+		p Bays in this location:
+		ul
+			each bay in bays
+				a(href='/carbay/#{bay.bayid}')
+					li= bay.name
+	else
+		p No bays
+	if (locals.children)
+		p Parent of:
+		ul
+			each child in children
+				a(href='/location/#{child.locid}')
+					li= child.name
+	else
+		p No children
+	if (locals.dbays)
+		p Bays contained by this location:
+		ul
+			each dbay in dbays
+				a(href='/carbay/#{dbay.bayid}')
+					li= dbay.name
+	else
+		p No descendant bays
