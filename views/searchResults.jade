@@ -1,0 +1,19 @@
+extends ./base.jade
+block content
+	form(method='post', action='/carbays')
+		div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+			input#search_string.mdl-textfield__input(name='search_string')
+			label.mdl-textfield__label(for='search_string') Location
+		div.mdl-card-actions.mdl-card--border
+			input.mdl-button.mdl-js-button.mdl-button-primary(type='submit', name='search')
+	if (locals.results)
+		p Results:
+		ul
+			each result in results
+				a(href='/carbay/#{result.bayid}')
+					li= result.name
+				a(href='/location/#{result.located_at}')
+					li= 'Nearby bays'
+	else
+		p No results
+

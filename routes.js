@@ -140,15 +140,35 @@ router.post('/newBooking', login_required(function* (){
 		return;
 	}
 
-
 	this.redirect('/booking/'+bookingId);
 }));
 
-router.get('/carbay', login_required(function*(){
+router.post('/carbays', login_required(function*(){
 	var nickname = this.cookies.get("loggedIn");
 	var member = yield getMember(nickname);
-	var carbays = yield getAllCarBays();
-	//TODO
+
+	var results;
+	if (!this.request.body.search_string)
+	{
+		results = null;
+	}
+	else
+	{
+		var search_string = this.request.body.search_string;
+		results = yield searchBays(search_string);
+	}
+	console.log(results);
+
+	yield this.render('searchResults', {member : member, results : results});
+}));
+
+router.get('/carbays', login_required(function*(){
+	var nickname = this.cookies.get("loggedIn");
+	var member = yield getMember(nickname);
+	var carbay = yield getCarBay(member.homebay);
+	console.log(carbay);
+
+	yield this.render('homebay', {member : member, carbay : carbay});
 }));
 
 router.get('/carbay/:id', login_required(function* (){
@@ -164,7 +184,7 @@ router.get('/car/:regno', login_required(function*(){
 	var member = yield getMember(nickname);
 	var car = yield getCar(this.params.regno);
 	console.log(car);
-}))
+}));
 
 router.get('/invoice', login_required(function* (){
 	var nickname = this.cookies.get("loggedIn");
@@ -172,7 +192,7 @@ router.get('/invoice', login_required(function* (){
 	var invoices = yield getInvoices(member.memberno);
 	console.log(invoices);
 	//TODO invoice browser
-}))
+}));
 
 router.get('/invoice/:id', login_required(function*(){
 	var nickname = this.cookies.get("loggedIn");
@@ -201,7 +221,7 @@ router.get('/location/:id', login_required(function*(){
 	console.log(dbays);
 
 	yield this.render('locationDetails', {location : location, bays : bays, parent : parent, children : children, dbays : dbays});
-}))
+}));
 
 router.get('/logout', login_required(function* () {
 	this.cookies.set("loggedIn", "bye", {expires : new Date()});

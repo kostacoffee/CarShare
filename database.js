@@ -26,11 +26,15 @@ global.getMember = function(nickname) {
 		return global.db.any("SELECT name from carbay where bayid=$1", user.homebay);
 	})
 	.then(function(data){
+		console.log(data.length);
+		console.log(data);
 		if (data.length == 0){
 			user.homebayName = "No Homebay";
 			user.homebay = -1;
 		}
-		user.homebayname = data[0].name;
+		else{
+			user.homebayname = data[0].name;
+		}
 		return user;
 	})
 }
@@ -104,7 +108,7 @@ global.getCarBay = function(id){
  	return global.db.one("SELECT * from CarBay WHERE bayid=$1", id)
  	.then(function(data){
 		bayData = data;
-		return global.db.many("SELECT * from Car where parkedAt=$1", id);
+		return global.db.many("SELECT car.*, NOT EXISTS(SELECT * FROM Booking WHERE CURRENT_TIMESTAMP BETWEEN startTime AND endTime) AS available FROM Car WHERE parkedAt = $1;", id);
 	})
 	.then(function(carData){
 		bayData.cars = carData;
@@ -114,11 +118,6 @@ global.getCarBay = function(id){
 		console.log(error);
 		return null;
 	});
-}
-
-global.incrementBookings = function(memberNo){
-	var query = "UPDATE Member SET stat_nrOfBookings = stat_nrOfBookings + 1 WHERE memberNo = $1;";
-	global.db.query(query, memberNo);
 }
 
 global.getHourlyRate = function(memberNo){
@@ -198,10 +197,10 @@ global.getCarBayAt = function(locID){
 	});
 }
 
-global.searchLocation = function(search_string){
+global.searchBays = function(search_string){
 	search_string = '%' + search_string.toLowerCase() + '%';
  	var bayData;
- 	return global.db.many("SELECT * FROM Location WHERE LOWER(name) LIKE $1", search_string)
+ 	return global.db.many("SELECT * FROM Carbay WHERE LOWER(name) LIKE $1 OR LOWER(address) LIKE $1;", search_string)
 	.then(function(data){
 		return data;
 	})
