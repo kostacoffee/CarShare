@@ -1,9 +1,15 @@
 extends ./base.jade
 block content
-	h2 Welcome #{member.nametitle} #{member.namegiven} #{member.namefamily}
-	p Your current membership plan is: #{member.subscribed}
-	p You've made a total of #{member.stat_nrofbookings} bookings!
-	//- ul
+	//- h2 Welcome #{member.nametitle} #{member.namegiven} #{member.namefamily}
+	//- p Your current membership plan is: #{member.subscribed}
+	//- p You've made a total of #{member.stat_nrofbookings} bookings!
+	//- //- ul
+	div#his.mdl-card
+		div.mdl-card__title
+			div.mdl-card__title-text My Booking History! 
+		div.mdl-card__supporting
+			div.mdl-card__supporting-text You've made a total of #{member.stat_nrofbookings} bookings!
+		
 	table#history.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
 		thead
 			tr
@@ -19,6 +25,6 @@ block content
 					td#carbooking #{entry.car}
 					td#regnobooking #{entry.regno}
 					td#datebooking #{entry.date}
-					td#lengthbooking #{entry.length}
+					td#lengthbooking #{entry.length} hours
 //- a(href='/booking/#{entry.id}')
 //- 	li= entry.id + ' ' + entry.car + ' ' + entry.regno + ' ' + entry.date + ' ' + entry.length

@@ -5,6 +5,7 @@
 	padding: 2px;
 	height: 266px;
 }
+
 #results{
 	max-width: 900px;
 	min-width: 100%;
@@ -41,6 +42,11 @@
 	text-decoration: none;
 
 }
+
+#his{
+	min-height:100px;
+}
+
 #home {
 	color: white;
 }
@@ -117,6 +123,7 @@ body{
 
 
 .mdl-layout__content{
+	/*overflow: visible;*/
 	margin-top: 15px;
 	display : flex;
 	flex-direction: column;
@@ -168,6 +175,9 @@ ul.mdl-menu a{
 }
 #Welcome{
 	height: 300px;
+}
+#scroll{
+	overflow: scroll;
 }
 
 #addbutton{
