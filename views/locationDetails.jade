@@ -3,7 +3,7 @@ block content
 	div.mdl-cell.mdl-cell--12-col
 		div#Surrounding.mdl-card.mdl-color--white.mdl-shadow--2dp
 			div.mdl-card__title
-				div.mdl-card__title-text Surrounding Location:
+				div.mdl-card__title-text #{location.name}
 			div.mdl-card__supporting
 				div.mdl-card__supporting-text Currently displaying all carbays in #{location.name}. 
 					if (locals.parent)
@@ -13,34 +13,34 @@ block content
 					a(href='/location/#{parent.locid}')
 						button.mdl-button.mdl-js-button.mdl-button-primary.mdl-button--raised.mdl-js-ripple-effect.mdl-button--accent Zoom out
 
-	p
-	div.mdl-card
-		div.mdl-card__title
-			div.mdl-card__title-text CarBay Results
-		table#results.mdl-data-table.mdl-js-data-table
-			tbody
-				if (locals.bays)
-					each bay in bays
-						tr
-							td
-								a(href='/carbay/#{bay.bayid}') #{bay.name}
-				else
-						tr
-							td No results
-	p
-	div.mdl-card
-		div.mdl-card__title
-			div.mdl-card__title-text Browse CarBays in:
-		table#results.mdl-data-table.mdl-js-data-table
-			tbody
-				if (locals.children)
-					each child in children
-						tr
-							td
-								a(href='/location/#{child.locid}') #{child.name}
-				else
-						tr
-							td No results
+	div.mdl-cell.mdl-cell--12-col.mdl-shadow--2dp
+		div#scroll.mdl-card
+			p
+			div.mdl-card__title
+				div.mdl-card__title-text CarBay Results
+			table#results.mdl-data-table.mdl-js-data-table
+				tbody
+					if (locals.bays)
+						each bay in bays
+							tr(onclick="window.document.location='/carbay/#{bay.bayid}'")
+								td
+									a(href='/carbay/#{bay.bayid}') #{bay.name}
+					else
+							tr
+								td No results
+	div.mdl-cell.mdl-cell--12-col.mdl-shadow--2dp						
+		div#scroll.mdl-card
+			div.mdl-card__title
+				div.mdl-card__title-text Browse CarBays in:
+			table#results.mdl-data-table.mdl-js-data-table
+				tbody
+					if (locals.children)
+						each child in children
+							tr(onclick="window.document.location='/location/#{child.locid}'")
+								td #{child.name}
+					else
+							tr
+								td No results
 	
 	
 	
