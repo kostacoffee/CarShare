@@ -104,8 +104,9 @@ body{
 
 
 .mdl-layout__content{
-	overflow: visible;
 	margin-top: 15px;
+	display : flex;
+	flex-direction: column;
 }
 
 .mdl-layout{
@@ -144,7 +145,7 @@ ul.mdl-menu a{
 
 }
 #filler{
-	height: 350px;
+	height: 300px;
 }
 
 #booking{
