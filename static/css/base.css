@@ -41,6 +41,11 @@
 	text-decoration: none;
 
 }
+
+#his{
+	min-height:100px;
+}
+
 #home {
 	color: white;
 }
