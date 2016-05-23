@@ -2,5 +2,11 @@ extends ./base.jade
 block content
 	div.mdl-card.mdl-shadow--2dp
 		div.mdl-card__title
-			h2.mdl-card__title-text #{car.name} - #{car.regno}
-			h2.mdl-catd__title-text #{car.year} #{car.make} #{car.model}
+			h2
+				span.mdl-card__title-text #{car.name} - #{car.regno}
+				span.mdl-card__subtitle-text #{car.year} #{car.make} #{car.model}
+		div#mediafillernew.mdl-card__media 
+		div.mdl-card__supporting-text
+			p Transmission: #{car.transmission}
+			p Parked in _
+				a(href='/location/#{car.parkedat}') #{car.locatedat_name}

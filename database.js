@@ -94,6 +94,11 @@ global.getCar = function(regno){
 					available[h] = false;
 			}
 			car.availabilities = available;
+			console.log(car);
+			return getLocation(car.parkedat);
+		})
+		.then(function(data){
+			car.locatedat_name = data.name
 			return car;
 		})
 		.catch(function(error){

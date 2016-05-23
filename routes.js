@@ -172,6 +172,7 @@ router.get('/car/:regno', login_required(function*(){
 	var member = yield getMember(nickname);
 	var car = yield getCar(this.params.regno);
 	console.log(car);
+	yield this.render('cardetails', {member : member, car : car})
 }));
 
 router.get('/invoice', login_required(function* (){
