@@ -31,7 +31,36 @@
 	text-align: left;
 }
 
+#results td{
+	text-align: left;
 
+}
+#results a{
+	list-style-type: none;
+	text-decoration: none;
+
+}
+
+
+#locsearch{
+	width:46%;
+	margin-right: 10px;
+
+}
+#namesearch{
+	width:46%;
+	margin-left: 10px;
+
+}
+#submitsearch{
+	text-align: right;
+	margin-right: 40px;
+}
+#baysearch{
+	margin-left:40px;
+	/*display: flex;
+	flex-direction: row;*/
+}
 
 body{
 	background-color: #f5f5f5;
