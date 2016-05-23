@@ -127,6 +127,10 @@ ul.mdl-menu a{
     display: flex !important;
 	margin-top: 10px;
 }
+
+.right-field{
+	float: right;
+}
 /*#date{
 	float: left;
 	width: 45%;
