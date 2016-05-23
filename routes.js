@@ -163,6 +163,7 @@ router.get('/carbay/:id', login_required(function* (){
 	var member = yield getMember(nickname);
 	var carBay = yield getCarBay(this.params.id);
 	console.log(carBay);
+	yield this.render('carBay', {member : member, carBay : carBay});
 	//TODO
 }));
 
