@@ -225,3 +225,7 @@ global.getDescendantBays = function(locID){
 		return null;
 	});
 }
+
+global.getAllInvoices = function(memberno){
+	return global.db.any("SELECT invoiceno, invoicedate, monthlyfee, totalamount FROM Invoice where memberNo=$1", memberno);
+}
