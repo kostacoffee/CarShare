@@ -43,6 +43,8 @@
 }
 
 
+
+
 #locsearch{
 	width:46%;
 	margin-right: 10px;
@@ -61,6 +63,14 @@
 	margin-left:40px;
 	/*display: flex;
 	flex-direction: row;*/
+}
+
+#zoomout{
+	margin-left: 10px;
+}
+
+#Surrounding{
+	min-height: 160px;
 }
 
 body{
