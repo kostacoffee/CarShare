@@ -9,13 +9,12 @@ block content
 				input#search_string.mdl-textfield__input(name='bay_name')
 				label.mdl-textfield__label(for='bay_name') Carbay Name
 			div#submitsearch.mdl-card-actions.mdl-card--border
-				input.mdl-button.mdl-js-button.mdl-button-primary(type='submit')
+				input.mdl-button.mdl-js-button.mdl-button-primary.mdl-button--raised.mdl-js-ripple-effect.mdl-button--accent(type='submit')
 	div.mdl-cell.mdl-cell--12-col
 		div.mdl-card.mdl-color--white.mdl-shadow--2dp
 			if (locals.results)
 				div.mdl-card__title
 					div.mdl-card__title-text Results:
-				
 				table#results.mdl-data-table.mdl-js-data-table
 					tbody
 						each result in results
