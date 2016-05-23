@@ -5,8 +5,9 @@
 	padding: 2px;
 	height: 266px;
 }
-.mdl-data-table{
-	width: 900px;
+#results{
+	max-width: 900px;
+	min-width: 100%;
 }
 
 #idbooking{
@@ -31,8 +32,8 @@
 	text-align: left;
 }
 
-#results td{
-	text-align: left;
+#results td,th{
+	text-align: left !important;
 
 }
 #results a{
