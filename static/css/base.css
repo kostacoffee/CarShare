@@ -41,9 +41,12 @@
 	text-decoration: none;
 
 }
-
-
-
+#home {
+	color: white;
+}
+a{
+	text-decoration: none;
+}
 
 #locsearch{
 	width:46%;
