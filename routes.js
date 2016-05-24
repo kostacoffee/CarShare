@@ -134,6 +134,15 @@ router.post('/newbooking', login_required(function* (){
 		}
 	}
 
+	/*
+	//TO USE: Uncomment this, and delete all the getCarAvailabilities stuff in here
+	var clashes = yield getBookingClash(car, this.request.body.startDate, this.request.body.endDate);
+	if (clashes.length > 0){
+		this.redirect('/newBooking');
+		return;
+	}
+	*/
+
 	console.log("making");
 	var bookingId = yield makeBooking(car, member.memberno, start, end)
 	.catch(function(error){

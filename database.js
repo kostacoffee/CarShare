@@ -122,15 +122,17 @@ global.getBookingHistory = function(memberNo){
 }
 	
 global.getCarAvailabilities = function(regno, date){
-	return global.db.any("SELECT extract(hour from starttime) as start, extract(hour from endtime) as end from Booking where car=$1 and starttime::date=$2::date", [regno, date])
+	return global.db.any("SELECT EXTRACT(HOUR FROM h.h) AS h FROM generate_series(TIMESTAMP $2, TIMESTAMP $2 + INTERVAL '23 hours', INTERVAL '1 hour') AS h WHERE EXISTS(SELECT * FROM Booking AS b WHERE b.car = $1 AND (b.startTime, b.endTime) OVERLAPS (h.h, h.h + INTERVAL '1 hour'));", [regno, date])
 	.then(function(data){
 		var available = new Array(24).fill(true);
-		for (var i = 0; i < data.length; i++){
-			for (var h = data[i].start; h < data[i].end; h++)
-				available[h] = false;
-		}
+		for (var i = 0; i < data.length; i++)
+			available[data[i].h] = false;
 		return available;
 	})
+}
+
+global.getBookingClash = function(regno, startTime, endTime){
+	return global.db.any("SELECT * FROM Booking AS b WHERE b.car = $1 AND (b.startTime, b.endTime) OVERLAPS (TIMESTAMP $2, TIMESTAMP $3);", [regno, startTime, endTime]);
 }
 
 global.getCar = function(regno){
