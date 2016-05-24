@@ -121,9 +121,9 @@ router.get('/newbooking', login_required(function* (){
 router.post('/newbooking', login_required(function* (){
 	var nickname = this.cookies.get("loggedIn");
 	var member = yield getMember(nickname);
-	var car = this.params.car;
-	var start = new Date(this.params.startDate);
-	var end = new Date(this.params.endDate);
+	var car = this.request.body.car;
+	var start = new Date(this.request.body.startDate);
+	var end = new Date(this.request.body.endDate);
 	// TODO Client-side verification for start and end times being on the same date.
 	var duration = end.getHours() - start.getHours();
 	var availabilities = yield getCarAvailabilities(car, start);
@@ -134,9 +134,14 @@ router.post('/newbooking', login_required(function* (){
 		}
 	}
 
-	var bookingId = yield makeBooking(car, member.memberno, start, end);
+	console.log("making");
+	var bookingId = yield makeBooking(car, member.memberno, start, end)
+	.catch(function(error){
+		console.log(error);
+	});
 	if (bookingId == null){
-		this.redirect('/newBooking');
+		console.log("DATABASE");
+		//this.redirect('/newBooking');
 		return;
 	}
 
