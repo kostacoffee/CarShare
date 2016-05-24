@@ -229,10 +229,15 @@ ul.mdl-menu a{
 	font-size: 8pt;
 }
 .availability-block label{
+	align-content: center;
 }
 .availability-block{
-	width:5% ;
+	width:100% ;
 	height:10px ;
+}
+
+.availability-container{
+
 }
 
 .availability-block.available{

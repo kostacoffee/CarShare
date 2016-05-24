@@ -11,11 +11,19 @@ block content
 			p Parked in 
 				a(href='/carbay/#{car.parkedat}') #{car.locatedat_name}
 
-		div.mdl-card__supporting-text.availabilities
-			each av in availabilities
-				div.availability-container
-					label #{av.time}:00 - #{av.time+1}:00
-					if (av.isAvailable)
+		div.mdl-card__supporting-text.availabilities.mdl-grid
+			each i in [0,1,2,3,4,5,6,7,8,9,10,11]
+				div.availability-container.mdl-cell.mdl-cell--1-col
+					label #{availabilities[i].time}:00 - #{availabilities[i].time+1}:00
+					if (availabilities[i].isAvailable)
+						div.availability-block.available 
+					else
+						div.availability-block.not-available 	
+		div.mdl-card__supporting-text.availabilities.mdl-grid
+			each i in [12,13,14,15,16,17,18,19,20,21,22,23]
+				div.availability-container.mdl-cell.mdl-cell--1-col
+					label #{availabilities[i].time}:00 - #{availabilities[i].time+1}:00
+					if (availabilities[i].isAvailable)
 						div.availability-block.available 
 					else
 						div.availability-block.not-available 	
