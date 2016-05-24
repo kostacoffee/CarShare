@@ -16,6 +16,12 @@
 */
 
 
+function getMonth(dateIndex){
+	var monthNames = ["January", "February", "March", "April", "May", "June",
+					  "July", "August", "September", "October", "November", "December"];
+	return monthNames[dateIndex];
+}
+
 global.getMember = function(nickname) {
 	nickname = nickname.toLowerCase();
 	var user;
@@ -141,11 +147,23 @@ global.getDailyRate = function(memberNo){
 }
 
 global.getInvoice = function(memberno, invoiceid){
-	return global.db.one("SELECT invoicedate, monthlyfee, totalamount from invoice where memberno=$1 and invoiceno=$2", [memberno, invoiceid]);
+	return global.db.one("SELECT invoicedate, monthlyfee, totalamount from invoice where memberno=$1 and invoiceno=$2", [memberno, invoiceid])
+	.then(function(data){
+		data.month = getMonth(data.invoicedate.getMonth());
+		data.year = data.invoicedate.getFullYear();
+		return data;
+	});
 }
 
 global.getInvoices = function(memberno){
-	return global.db.any("SELECT invoiceno, invoicedate, monthlyfee, totalamount from Invoice where memberno=$1 order by invoiceno desc", memberno);
+	return global.db.any("SELECT invoiceno, invoicedate, monthlyfee, totalamount from Invoice where memberno=$1 order by invoiceno desc", memberno)
+	.then(function(data){
+		for (var i = 0; i < data.length; i++){
+			data[i].month = getMonth(data[i].invoicedate.getMonth());
+			data[i].year = data[i].invoicedate.getFullYear();
+		}
+		return data;
+	});
 }
 
 global.getBookingsForInvoice = function(memberno, date){
