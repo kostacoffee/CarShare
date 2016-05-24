@@ -1,6 +1,6 @@
 extends ./base.jade
 block content
-	div.mdl-card
+	div#bay.mdl-card
 		div.mdl-card__title
 			h2.mdl-card__title-text #{carBay.name}
 		div#mediafillernew.mdl-card__media 
@@ -13,15 +13,15 @@ block content
 		div.mdl-card__title
 			h2.mdl-card__title-text Cars at this location
 		//- div.mdl-card__supporting-text
-		table#results.mdl-data-table.mdl-js-data-table
-			thead
-				th Name
-				th Make & Model
-				th Transmission
-			tbody
-				each car in carBay.cars
-					tr(onclick="window.document.location='/car/#{car.regno}'")
-						td #{car.name}
-						td #{car.make} #{car.model}
-						td #{car.transmission}
+	table#results.mdl-data-table.mdl-js-data-table
+		thead
+			th Name
+			th Make & Model
+			th Transmission
+		tbody
+			each car in carBay.cars
+				tr(onclick="window.document.location='/car/#{car.regno}'")
+					td #{car.name}
+					td #{car.make} #{car.model}
+					td #{car.transmission}
 	p

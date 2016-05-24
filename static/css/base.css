@@ -87,6 +87,9 @@ a{
 	/*display: flex;
 	flex-direction: row;*/
 }
+#bay{
+	min-height: 400px;
+}
 
 #zoomout{
 	margin-left: 10px;

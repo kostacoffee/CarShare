@@ -1,30 +1,34 @@
 extends ./base.jade
 block content
-	div#invoicehis.mdl-card
+	div#invoicehis.mdl-card.mdl-shadow--4dp
 		div.mdl-card__title
 			div.mdl-card__title-text Profile
 	p
-	div.mdl-card
+	div#invoice.mdl-card.mdl-shadow--4dp
 		div.mdl-card__title
 				h2
-					span.mdl-card__title-text Title: 
-					span.mdl-card__title-text First Name: 
-					span.mdl-card__title-text Last Name:
+					span.mdl-card__title-text Title: #{member.nametitle}  
+					span.mdl-card__title-text First Name: #{member.namegiven}
+					span.mdl-card__title-text Last Name: #{member.namefamily}
 	p
-	div.mdl-card
+	div#invoice.mdl-card.mdl-shadow--4dp
 		div.mdl-card__title
 				h2
-					span.mdl-card__title-text Member Since:
-					span.mdl-card__title-text Membership:
+					span.mdl-card__title-text Member Since: #{member.since}
+					span.mdl-card__title-text Membership: #{member.subscribed}
+	//- p
+	//- div#invoice.mdl-card.mdl-shadow--4dp
+	//- 	div.mdl-card__title
+	//- 			h2
+	//- 				span.mdl-card__title-text Primary Color:
+	//- 				span.mdl-card__title-text Secondary Color:
 	p
-	div.mdl-card
+	div#invoice.mdl-card.mdl-shadow--4dp
 		div.mdl-card__title
 				h2
-					span.mdl-card__title-text Primary Color:
-					span.mdl-card__title-text Secondary Color:
+					span.mdl-card__title-text User Name: #{member.nickname}
+					span.mdl-card__title-text Password
 	p
-	div.mdl-card
-		div.mdl-card__title
-				h2
-					span.mdl-card__title-text User Name:
-					span.mdl-card__title-text Passward
+	div#submitsearch.mdl-card-actions.mdl-card--border
+		a(href='/profile/edit')
+			button.mdl-button.mdl-js-button.mdl-button-primary.mdl-button--raised.mdl-js-ripple-effect.mdl-button--accent  Edit
