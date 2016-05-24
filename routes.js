@@ -203,6 +203,7 @@ router.post('/newbooking', login_required(function* (){
 	});
 	if (bookingId == null){
 		console.log("DATABASE");
+		this.redirect('/error');
 		//this.redirect('/newBooking');
 		return;
 	}
@@ -302,6 +303,10 @@ router.get('/logout', login_required(function* () {
 	this.cookies.set("loggedIn", "bye", {expires : new Date()});
 	this.redirect('/');
 }));
+
+router.get('/error', function* (){
+	yield this.render('error');
+})
 
 router.get('/test', login_required(function* (){
 	var nickname = this.cookies.get("loggedIn");
