@@ -186,6 +186,13 @@ ul.mdl-menu a{
 	right: 26px;
 }
 
+#invoice {
+	min-height: 100px;
+}
+#invoicehis{
+	min-height: 50px;
+}
+
 .mdl-card__supporting-text{
 	padding-top: 5px;
 }

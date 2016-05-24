@@ -1,48 +1,50 @@
 extends ./base.jade
 block content
-	div.mdl-card
-		div.mdl-card__title
-			div.mdl-card__title-text Invoices - #{latestInvoice.date}
-		div.mdl-card__supporting
-			div.mdl-card__supporting-text This month's invoice is available!
-			
-	table#history.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
-		thead
-			tr
-				th#idbooking.mdl-data-table__cell--non-numeric Id
-				th#carbooking Car
-				th#regnobooking Regno
-				th#datebooking Date
-				th#lengthbooking Invoice Bill 
-		tbody
-			each entry in history	
-				tr(onclick="window.document.location='/booking/#{entry.id}'")
-					td#idbooking #{entry.id}
-					td#carbooking #{entry.car}
-					td#regnobooking #{entry.regno}
-					td#datebooking #{entry.date}
-			tr
-				td
-				td
-				td Total:
-				td $
+	if (latestInvoice)
+		div#invoice.mdl-card
+			div.mdl-card__title
+				div.mdl-card__title-text Invoices - #{latestInvoice.invoicedate}
+			div.mdl-card__supporting
+				div.mdl-card__supporting-text This month's invoice is available!
 				
-	div.mdl-card__title
-		div.mdl-card__title-text
-		
+				
 		table#history.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
 			thead
 				tr
-					th#idbooking.mdl-data-table__cell--non-numeric Id
-					th#carbooking Car
-					th#regnobooking Regno
-					th#datebooking Date
-					th#lengthbooking Length
+					th#idbooking.mdl-data-table__cell--non-numeric Invoice ID
+					th#carbooking Invoice Date
+					th#regnobooking Monthly Fee
+					th#datebooking Total Amount
 			tbody
-				each entry in history	
-					tr(onclick="window.document.location='/booking/#{entry.id}'")
-						td#idbooking #{entry.id}
-						td#carbooking #{entry.car}
-						td#regnobooking #{entry.regno}
-						td#datebooking #{entry.date}
-						td#lengthbooking #{entry.length} hours
+				//- each entry in invoices	
+				tr(onclick="window.document.location='/invoice/#{latestInvoice.invoiceno}'")
+					td#idbooking #{latestInvoice.invoiceno}
+					td#carbooking #{latestInvoice.invoicedate}
+					td#regnobooking $ #{latestInvoice.monthlyfee}
+					td#datebooking $ #{latestInvoice.totalamount}
+				
+		p
+		div#invoicehis.mdl-card
+			div.mdl-card__title
+				div.mdl-card__title-text My Full Invoice History 
+			
+		table#history.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
+			thead
+				tr
+					th#idbooking.mdl-data-table__cell--non-numeric Invoice ID
+					th#carbooking Invoice Date
+					th#regnobooking Monthly Fee
+					th#datebooking Total Amount
+			tbody
+				each invoice in invoices	
+					tr(onclick="window.document.location='/invoice/#{invoice.invoiceno}'")
+						td#idbooking #{invoice.invoiceno}
+						td#carbooking #{invoice.invoicedate}
+						td#regnobooking $ #{invoice.monthlyfee}
+						td#datebooking $ #{invoice.totalamount}
+	else
+		div.mdl-card
+			div.mdl-card__title
+				div.mdl-card__title-text Invoices
+			div.mdl-card__supporting
+				div.mdl-card__supporting-text You have no invoice history!
