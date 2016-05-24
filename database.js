@@ -86,7 +86,7 @@ global.getBooking = function(memberNo, bookingID){
 
 		data.whenBookedDay = data.whenbooked.getDate();
 		data.whenBookedMonth = getMonth(data.whenbooked.getMonth());
-		data.whenBookedYear = data.whenbooked.getYear();
+		data.whenBookedYear = data.whenbooked.getFullYear();
 		data.whenBookedTime = formatTime(data.whenbooked);
 		return data;
 	})
@@ -114,7 +114,7 @@ global.getBookingHistory = function(memberNo){
 
 			data[i].whenBookedDay = data[i].whenbooked.getDate();
 			data[i].whenBookedMonth = getMonth(data[i].whenbooked.getMonth());
-			data[i].whenBookedYear = data[i].whenbooked.getYear();
+			data[i].whenBookedYear = data[i].whenbooked.getFullYear();
 			data[i].whenBookedTime = formatTime(data[i].whenbooked)
 		}
 		return data;
@@ -217,8 +217,27 @@ global.getInvoices = function(memberno){
 global.getBookingsForInvoice = function(memberno, date){
 	var startDate = new Date(date.getFullYear(), date.getMonth(), 2);
 	var endDate = new Date(date.getFullYear(), date.getMonth() + 1, 2);
-	var query = "SELECT bookingid, car, starttime, endtime from Booking where madeby=$1 and endtime>=$2 and endtime < $3"
-	return global.db.any(query, [memberno, startDate, endDate]);
+	var query = "SELECT bookingid, car, starttime as date, endtime as end, whenBooked from Booking where madeby=$1 and endtime>=$2 and endtime < $3"
+	return global.db.any(query, [memberno, startDate, endDate])	
+	.then(function(data){
+		for (var i = 0; i < data.length; i++){
+			data[i].startDayInMonth = data[i].date.getDate();
+			data[i].startMonth = getMonth(data[i].date.getMonth());
+			data[i].startYear = data[i].date.getFullYear();
+			data[i].startTime = formatTime(data[i].date)
+
+			data[i].endDayInMonth = data[i].end.getDate();
+			data[i].endMonth = getMonth(data[i].end.getMonth());
+			data[i].endYear = data[i].end.getFullYear();
+			data[i].endTime = formatTime(data[i].end);
+
+			data[i].whenBookedDay = data[i].whenbooked.getDate();
+			data[i].whenBookedMonth = getMonth(data[i].whenbooked.getMonth());
+			data[i].whenBookedYear = data[i].whenbooked.getFullYear();
+			data[i].whenBookedTime = formatTime(data[i].whenbooked)
+		}
+		return data;
+	});
 }
 
 global.addInvoice = function(memberno, date, cost){
