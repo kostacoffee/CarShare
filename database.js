@@ -98,7 +98,7 @@ global.adminGetBooking = function(bookingID){
 }
 
 global.getBookingHistory = function(memberNo){
-	var query = "SELECT b.bookingID as id, c.name AS car, c.regno AS regno, b.startTime::DATE AS date, EXTRACT(HOUR FROM b.endTime - b.startTime) AS length, b.endTime::DATE as end, b.whenBooked as whenBooked FROM Booking AS b INNER JOIN Car AS c ON b.car = c.regno WHERE madeBy = $1 ORDER BY b.startTime DESC;";
+	var query = "SELECT b.bookingID as id, c.name AS car, c.regno AS regno, b.startTime AS date, EXTRACT(HOUR FROM b.endTime - b.startTime) AS length, b.endTime as end, b.whenBooked as whenBooked FROM Booking AS b INNER JOIN Car AS c ON b.car = c.regno WHERE madeBy = $1 ORDER BY b.startTime DESC;";
 	return global.db.many(query, memberNo)
 	.then(function(data){
 		for (var i = 0; i < data.length; i++){
