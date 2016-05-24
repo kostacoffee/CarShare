@@ -222,7 +222,7 @@ global.searchBays = function(search_string){
 
 global.getDescendantBays = function(locID){
 	var query = "WITH RECURSIVE contains(locid, is_at) AS (SELECT locid, is_at FROM Location UNION SELECT Location.locid, contains.is_at FROM Location, contains WHERE Location.is_at = contains.locid) SELECT Carbay.* FROM contains INNER JOIN Carbay ON locID = located_at WHERE is_at = $1;";
-	return global.db.many(query, locID)
+	return global.db.any(query, locID)
 	.then(function(data){
 		return data;
 	})
@@ -232,5 +232,5 @@ global.getDescendantBays = function(locID){
 }
 
 global.getAllInvoices = function(memberno){
-	return global.db.any("SELECT invoiceno, invoicedate, monthlyfee, totalamount FROM Invoice where memberNo=$1", memberno);
+	return global.db.any("SELECT invoiceno, invoicedate, monthlyfee, totalamount FROM Invoice WHERE memberNo=$1 ORDER BY invoiceno DESC", memberno);
 }

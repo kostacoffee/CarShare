@@ -13,43 +13,36 @@ block content
 					a(href='/location/#{parent.locid}')
 						button.mdl-button.mdl-js-button.mdl-button-primary.mdl-button--raised.mdl-js-ripple-effect.mdl-button--accent Zoom out
 
-	div.mdl-cell.mdl-cell--12-col.mdl-shadow--2dp
-		div#scroll.mdl-card
-			p
-			div.mdl-card__title
-				div.mdl-card__title-text CarBay Results
-			table#results.mdl-data-table.mdl-js-data-table
-				tbody
-					if (locals.bays)
-						each bay in bays
-							tr(onclick="window.document.location='/carbay/#{bay.bayid}'")
-								td
-									a(href='/carbay/#{bay.bayid}') #{bay.name}
-					else
-							tr
-								td No results
-	div.mdl-cell.mdl-cell--12-col.mdl-shadow--2dp						
-		div#scroll.mdl-card
-			div.mdl-card__title
-				div.mdl-card__title-text Browse CarBays in:
-			table#results.mdl-data-table.mdl-js-data-table
-				tbody
-					if (locals.children)
-						each child in children
-							tr(onclick="window.document.location='/location/#{child.locid}'")
-								td #{child.name}
-					else
-							tr
-								td No results
+	if (bays)
+		div.mdl-cell.mdl-cell--12-col.mdl-shadow--2dp
+			div#scroll.mdl-card
+				p
+				div.mdl-card__title
+					div.mdl-card__title-text CarBay Results
+				table#results.mdl-data-table.mdl-js-data-table
+					tbody
+						
+							each bay in bays
+								tr(onclick="window.document.location='/carbay/#{bay.bayid}'")
+									td
+										a(href='/carbay/#{bay.bayid}') #{bay.name}
+
+	if (children)
+		div.mdl-cell.mdl-cell--12-col.mdl-shadow--2dp						
+			div#scroll.mdl-card
+				div.mdl-card__title
+					div.mdl-card__title-text Browse CarBays in:
+				table#results.mdl-data-table.mdl-js-data-table
+					tbody
+						if (locals.children)
+							each child in children
+								tr(onclick="window.document.location='/location/#{child.locid}'")
+									td #{child.name}
+									td #{child.descendants}
+						else
+								tr
+									td No results
 	
 	
 	
-	//TODO: number of carbays in each location. Instead of the following.
-	//- if (locals.dbays)
-	//- 	p Bays contained by this location:
-	//- 	ul
-	//- 		each dbay in dbays
-	//- 			a(href='/carbay/#{dbay.bayid}')
-	//- 				li= dbay.name
-	//- else
-	//- 	p No descendant bays
+	

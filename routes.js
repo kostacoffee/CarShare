@@ -164,7 +164,6 @@ router.get('/carbay/:id', login_required(function* (){
 	var carBay = yield getCarBay(this.params.id);
 	console.log(carBay);
 	yield this.render('carBay', {member : member, carBay : carBay});
-	//TODO
 }));
 
 router.get('/car/:regno', login_required(function*(){
@@ -175,11 +174,12 @@ router.get('/car/:regno', login_required(function*(){
 	yield this.render('cardetails', {member : member, car : car})
 }));
 
-router.get('/invoice', login_required(function* (){
+router.get('/invoices', login_required(function* (){
 	var nickname = this.cookies.get("loggedIn");
 	var member = yield getMember(nickname);
 	var invoices = yield getInvoices(member.memberno);
 	console.log(invoices);
+	yield this.render('invoices', {member : member, invoices : invoices});
 	//TODO invoice browser
 }));
 
@@ -206,21 +206,21 @@ router.get('/location/:id', login_required(function*(){
 	var nickname = this.cookies.get("loggedIn");
 	var member = yield getMember(nickname);
 	var location = yield getLocation(this.params.id);
-	console.log(location);
 
 	var bays = yield getCarBayAt(this.params.id);
-	console.log(bays);
 
 	var parent = yield getLocation(location.is_at);
-	console.log(parent);
 
 	var children = yield getChildren(this.params.id);
-	console.log(children);
+	if (children != null)
+		for (var i = 0; i < children.length; i++){
+			var desc = yield getDescendantBays(children[i].locid)
+			if (desc.length == 0)
+				desc = yield getCarBayAt(children[i].locid);
+			children[i].descendants = desc.length;
+		}
 
-	var dbays = yield getDescendantBays(this.params.id);
-	console.log(dbays);
-
-	yield this.render('locationDetails', {member : member, location : location, bays : bays, parent : parent, children : children, dbays : dbays});
+	yield this.render('locationDetails', {member : member, location : location, bays : bays, parent : parent, children : children});
 }));
 
 router.get('/logout', login_required(function* () {
