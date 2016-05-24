@@ -71,15 +71,23 @@ global.makeBooking = function(car, member, startDate, endDate){
 
 
 global.getBooking = function(memberNo, bookingID){
-	var query = "SELECT c.name as car, c.regno as regno, cb.name as bay, cb.bayid as bayid, b.startTime as start, b.bookingid as bookingid, EXTRACT(HOUR FROM b.startTime), b.endTime as end, EXTRACT(HOUR FROM b.endTime), b.whenBooked FROM Booking AS b INNER JOIN Car AS c ON b.car = c.regno INNER JOIN CarBay AS cb ON c.parkedAt = cb.bayID WHERE b.madeBy = $1 AND b.bookingID = $2";
+	var query = "SELECT c.name as car, c.regno as regno, cb.name as bay, cb.bayid as bayid, b.startTime as start, b.bookingid as bookingid, EXTRACT(HOUR FROM b.startTime), b.endTime as end, EXTRACT(HOUR FROM b.endTime), b.whenBooked as whenBooked FROM Booking AS b INNER JOIN Car AS c ON b.car = c.regno INNER JOIN CarBay AS cb ON c.parkedAt = cb.bayID WHERE b.madeBy = $1 AND b.bookingID = $2";
 	return global.db.one(query, [memberNo, bookingID])
 	.then(function(data){
-		data.dayInMonth = data.start.getDate();
-		data.month = getMonth(data.start.getMonth());
-		data.year = data.start.getFullYear();
-		data.starttime = formatTime(data.start)
-		data.endtime = formatTime(data.end);
-		console.log(data);
+		data.startDayInMonth = data.start.getDate();
+		data.startMonth = getMonth(data.start.getMonth());
+		data.startYear = data.start.getFullYear();
+		data.startTime = formatTime(data.start)
+
+		data.endDayInMonth = data.end.getDate();
+		data.endMonth = getMonth(data.end.getMonth());
+		data.endYear = data.end.getFullYear();
+		data.endTime = formatTime(data.end);
+
+		data.whenBookedDay = data.whenbooked.getDate();
+		data.whenBookedMonth = getMonth(data.whenbooked.getMonth());
+		data.whenBookedYear = data.whenbooked.getYear();
+		data.whenBookedTime = formatTime(data.whenbooked);
 		return data;
 	})
 }
@@ -90,17 +98,25 @@ global.adminGetBooking = function(bookingID){
 }
 
 global.getBookingHistory = function(memberNo){
-	var query = "SELECT b.bookingID as id, c.name AS car, c.regno AS regno, b.startTime::DATE AS date, EXTRACT(HOUR FROM b.endTime - b.startTime) AS length FROM Booking AS b INNER JOIN Car AS c ON b.car = c.regno WHERE madeBy = $1 ORDER BY b.startTime DESC;";
+	var query = "SELECT b.bookingID as id, c.name AS car, c.regno AS regno, b.startTime::DATE AS date, EXTRACT(HOUR FROM b.endTime - b.startTime) AS length, b.endTime::DATE as end, b.whenBooked as whenBooked FROM Booking AS b INNER JOIN Car AS c ON b.car = c.regno WHERE madeBy = $1 ORDER BY b.startTime DESC;";
 	return global.db.many(query, memberNo)
 	.then(function(data){
 		for (var i = 0; i < data.length; i++){
-			data[i].dayInMonth = data[i].date.getDate();
-			data[i].month = getMonth(data[i].date.getMonth());
-			data[i].year = data[i].date.getFullYear();
+			data[i].startDayInMonth = data[i].date.getDate();
+			data[i].startMonth = getMonth(data[i].date.getMonth());
+			data[i].startYear = data[i].date.getFullYear();
 			data[i].startTime = formatTime(data[i].date)
-			data[i].endTime = formatTime(data[i].date);
+
+			data[i].endDayInMonth = data[i].end.getDate();
+			data[i].endMonth = getMonth(data[i].end.getMonth());
+			data[i].endYear = data[i].end.getFullYear();
+			data[i].endTime = formatTime(data[i].end);
+
+			data[i].whenBookedDay = data[i].whenbooked.getDate();
+			data[i].whenBookedMonth = getMonth(data[i].whenbooked.getMonth());
+			data[i].whenBookedYear = data[i].whenbooked.getYear();
+			data[i].whenBookedTime = formatTime(data[i].whenbooked)
 		}
-		//console.log(data);
 		return data;
 	});
 }
