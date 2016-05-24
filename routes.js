@@ -202,6 +202,7 @@ router.get('/invoice/:id', login_required(function*(){
 	console.log(bookingsForInvoice);
 	if (bookingsForInvoice.length == 0)
 		bookingsForInvoice = null;
+	console.log(bookingsForInvoice);
 	yield this.render('invoice', {member : member, invoice : invoiceData, bookings : bookingsForInvoice});
 }));
 

@@ -13,19 +13,19 @@ block content
 	table#history.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
 		thead
 			tr
-				th#idbooking.mdl-data-table__cell--non-numeric Id
-				th#carbooking Car
-				th#regnobooking Regno
-				th#datebooking Date
-				th#lengthbooking Length
+				th#tabletab.mdl-data-table__cell--non-numeric Id
+				th#tabletab Car
+				th#tabletab Regno
+				th#tabletab Date
+				th#tabletab Length
 		tbody
 			each entry in history	
 				tr(onclick="window.document.location='/booking/#{entry.id}'")
-					td#idbooking #{entry.id}
-					td#carbooking #{entry.car}
-					td#regnobooking #{entry.regno}
-					td#datebooking #{entry.dayInMonth} #{entry.month} #{entry.year} #{entry.startTime}
-					td#lengthbooking #{entry.length} hours
+					td#tabletab #{entry.id}
+					td#tabletab #{entry.car}
+					td#tabletab #{entry.regno}
+					td#tabletab #{entry.dayInMonth} #{entry.month} #{entry.year} #{entry.startTime}
+					td#tabletab #{entry.length} hours
 	p
 //- a(href='/booking/#{entry.id}')
 //- 	li= entry.id + ' ' + entry.car + ' ' + entry.regno + ' ' + entry.date + ' ' + entry.length
