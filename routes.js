@@ -140,7 +140,7 @@ router.post('/profile/edit', login_required(function* (){
 
 	if (newPassword != null && newPassword.length > 0){
 		var memberHash = member.password;
-		var oldHash = getHash(oldpassword, member.pw_salt);
+		var oldHash = getHash(oldPassword, member.pw_salt);
 		if (memberHash == oldHash){
 			//insert new password here
 			var newHash = getHash(newPassword, member.pw_salt);
@@ -153,7 +153,9 @@ router.post('/profile/edit', login_required(function* (){
 	if (firstname != null && firstname.length > 0)
 		yield updateUserFirstname(member.memberno, firstname);
 	if (lastname != null && lastname.length > 0)
-		yield updateUserLastname(member.memberno, lastname);a
+		yield updateUserLastname(member.memberno, lastname);
+
+	this.redirect('/profile');
 
 }));
 	
