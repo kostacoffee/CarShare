@@ -3,7 +3,7 @@ block content
 	if (latestInvoice)
 		div#invoice.mdl-card
 			div.mdl-card__title
-				div.mdl-card__title-text Invoices - #{latestInvoice.invoicedate}
+				div.mdl-card__title-text Invoices - #{latestInvoice.month} #{latestInvoice.year}
 			div.mdl-card__supporting
 				div.mdl-card__supporting-text This month's invoice is available!
 				
@@ -11,17 +11,17 @@ block content
 		table#history.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
 			thead
 				tr
-					th#idbooking.mdl-data-table__cell--non-numeric Invoice ID
-					th#carbooking Invoice Date
-					th#regnobooking Monthly Fee
-					th#datebooking Total Amount
+					th#tabletab.mdl-data-table__cell--non-numeric Invoice ID
+					th#tabletab Invoice Date
+					th#tabletab Monthly Fee
+					th#tabletab Total Amount
 			tbody
 				//- each entry in invoices	
 				tr(onclick="window.document.location='/invoice/#{latestInvoice.invoiceno}'")
-					td#idbooking #{latestInvoice.invoiceno}
-					td#carbooking #{latestInvoice.invoicedate}
-					td#regnobooking $ #{latestInvoice.monthlyfee}
-					td#datebooking $ #{latestInvoice.totalamount}
+					td#tabletab #{latestInvoice.invoiceno}
+					td#tabletab #{latestInvoice.month} #{latestInvoice.year}
+					td#tabletab $ #{latestInvoice.monthlyfee}
+					td#tabletab $ #{latestInvoice.totalamount}
 				
 		p
 		div#invoicehis.mdl-card
@@ -31,17 +31,17 @@ block content
 		table#history.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
 			thead
 				tr
-					th#idbooking.mdl-data-table__cell--non-numeric Invoice ID
-					th#carbooking Invoice Date
-					th#regnobooking Monthly Fee
-					th#datebooking Total Amount
+					th#tabletab.mdl-data-table__cell--non-numeric Invoice ID
+					th#tabletab Invoice Date
+					th#tabletab Monthly Fee
+					th#tabletab Total Amount
 			tbody
 				each invoice in invoices	
 					tr(onclick="window.document.location='/invoice/#{invoice.invoiceno}'")
-						td#idbooking #{invoice.invoiceno}
-						td#carbooking #{invoice.invoicedate}
-						td#regnobooking $ #{invoice.monthlyfee}
-						td#datebooking $ #{invoice.totalamount}
+						td#tabletab #{invoice.invoiceno}
+						td#tabletab #{invoice.month} #{invoice.year}
+						td#tabletab $ #{invoice.monthlyfee}
+						td#tabletab $ #{invoice.totalamount}
 	else
 		div.mdl-card
 			div.mdl-card__title

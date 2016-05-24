@@ -16,6 +16,11 @@
 	text-align: left;
 }
 
+#tabletab{
+	width: 225px;
+	text-align: left;
+}
+
 #carbooking{
 	width: 200px;
 	text-align: left;
@@ -184,6 +189,10 @@ ul.mdl-menu a{
 	position: absolute;
 	top: -20px;
 	right: 26px;
+}
+
+#history{
+	min-width: 900px;
 }
 
 #invoice {
