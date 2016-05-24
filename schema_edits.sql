@@ -9,6 +9,15 @@ GRANT USAGE ON SEQUENCE booking_bookingid_seq TO webuser;
 ALTER TABLE carsharing.Member ALTER COLUMN password TYPE char(88);
 ALTER TABLE carsharing.Member ALTER COLUMN pw_salt TYPE char(24);
 
+/* we will keep all monetary data as integer values representing cents */
+CREATE DOMAIN AmountInCents AS INTEGER CHECK (VALUE >= 0);
+/* for Member and PayPal table */
+CREATE DOMAIN EMailType AS VARCHAR(50) CHECK (value SIMILAR TO '[[:alnum:]_]+@[[:alnum:]]+%.[[:alnum:]]+');
+/* for car registrations */
+CREATE DOMAIN RegoType AS CHAR(6)      CHECK (value SIMILAR TO '[[:alnum:]]{6}');
+/* for ratings */
+CREATE DOMAIN RatingDomain AS SMALLINT CHECK ( VALUE BETWEEN 1 AND 5 );
+
 DROP FUNCTION IF EXISTS getMember(varchar);
 CREATE OR REPLACE FUNCTION getMember(a_nickname varchar)
 RETURNS TABLE(

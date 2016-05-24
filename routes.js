@@ -215,13 +215,18 @@ router.get('/location/:id', login_required(function*(){
 	var parent = yield getLocation(location.is_at);
 
 	var children = yield getChildren(this.params.id);
-	if (children != null)
+	if (children != null){
 		for (var i = 0; i < children.length; i++){
-			var desc = yield getDescendantBays(children[i].locid)
-			if (desc.length == 0)
+			var desc = yield getDescendantBays(children[i].locid);
+			if (desc == null){
 				desc = yield getCarBayAt(children[i].locid);
-			children[i].descendants = desc.length;
+				children[i].descendants = 0;
+			}
+			else{
+				children[i].descendants = desc.length;
+			}
 		}
+	}
 
 	yield this.render('locationDetails', {member : member, location : location, bays : bays, parent : parent, children : children});
 }));
