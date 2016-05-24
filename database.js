@@ -30,6 +30,14 @@ function formatTime(date){
 	return hours+':'+minutes;
 }
 
+global.updateUserDetails = function(memberno, title, firstname, lastname){
+	
+}
+
+global.updatePassword = function(memberno, hashedpw){
+	return global.db.any("UPDATE Member SET password=$1 where memberno=$2", [hashedpw, memberno]);
+}
+
 global.getMember = function(nickname) {
 	nickname = nickname.toLowerCase();
 	var user;
