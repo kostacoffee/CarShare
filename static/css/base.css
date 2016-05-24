@@ -222,3 +222,22 @@ ul.mdl-menu a{
 	width: auto;
 
 }
+
+.availabilities{
+	display: flex !important;
+	flex-direction: row !important;
+	font-size: 8pt;
+}
+.availability-block label{
+}
+.availability-block{
+	width:5% ;
+	height:10px ;
+}
+
+.availability-block.available{
+	background-color: green;
+}
+.availability-block.not-available{
+	background-color: red;
+}
