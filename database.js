@@ -147,7 +147,7 @@ global.getDailyRate = function(memberNo){
 }
 
 global.getInvoice = function(memberno, invoiceid){
-	return global.db.one("SELECT invoicedate, monthlyfee, totalamount from invoice where memberno=$1 and invoiceno=$2", [memberno, invoiceid])
+	return global.db.one("SELECT * FROM invoice where memberno=$1 and invoiceno=$2", [memberno, invoiceid])
 	.then(function(data){
 		data.month = getMonth(data.invoicedate.getMonth());
 		data.year = data.invoicedate.getFullYear();
@@ -156,7 +156,7 @@ global.getInvoice = function(memberno, invoiceid){
 }
 
 global.getInvoices = function(memberno){
-	return global.db.any("SELECT invoiceno, invoicedate, monthlyfee, totalamount from Invoice where memberno=$1 order by invoiceno desc", memberno)
+	return global.db.any("SELECT * FROM Invoice where memberno=$1 order by invoiceno desc", memberno)
 	.then(function(data){
 		for (var i = 0; i < data.length; i++){
 			data[i].month = getMonth(data[i].invoicedate.getMonth());
