@@ -30,8 +30,16 @@ function formatTime(date){
 	return hours+':'+minutes;
 }
 
-global.updateUserDetails = function(memberno, title, firstname, lastname){
-	
+global.updateUserTitle = function(memberno, title){
+	return global.db.any("UPDATE Member SET nametitle=$1 where memberno=$2", [title, memberno]);
+}
+
+global.updateUserFirstname = function(memberno, firstname){
+	return global.db.any("UPDATE Member SET namegiven=$1 where memberno=$2", [firstname, memberno]);
+}
+
+global.updateUserLastname = function(memberno, lastname){
+	return global.db.any("UPDATE Member SET namefamily=$1 where memberno=$2", [lastname, memberno]);
 }
 
 global.updatePassword = function(memberno, hashedpw){
