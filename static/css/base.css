@@ -6,6 +6,15 @@
 	height: 266px;
 }
 
+#book{
+	width: 800px;
+	margin: auto;
+}
+#tab{
+	width: 400px;
+	text-align: left;
+}
+
 #results{
 	max-width: 900px;
 	min-width: 100%;

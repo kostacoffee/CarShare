@@ -1,42 +1,60 @@
 extends ./base.jade
 block content
-		<table class="mdl-data-table mdl-js-data-table">
-		<thead>
-		<tr>
-		<th class="mdl-data-table__cell--non-numeric">Car</th>
-		<th>Rego</th>
-		<th>Bay</th>
-		<th>Start</th>
-		<th>Length</th>
-		<th>When</th>
-		</tr>
-		</thead>
-		<tbody>
-		<tr>
-		<th>#{booking.car}</th>
-		<th>#{booking.regno}</th>
-		<th>#{booking.bay}</th>
-		<th>#{booking.start}</th>
-		<th>#{booking.length}</th>
-		<th#{booking.whenbooked}th>
-		</tr>
-		//- <tr>
-		//- <td class="mdl-data-table__cell--non-numeric">Paul McCartney</td>
-		//- <td class="mdl-data-table__cell--non-numeric">The cute one</td>
-		//- <td>73</td>
-		//- <td class="mdl-data-table__cell--non-numeric">Yes</td>
-		//- </tr>
-		//- <tr>
-		//- <td class="mdl-data-table__cell--non-numeric">George Harrison</td>
-		//- <td class="mdl-data-table__cell--non-numeric">The shy one</td>
-		//- <td>58</td>
-		//- <td class="mdl-data-table__cell--non-numeric">No</td>
-		//- </tr>
-		//- <tr>
-		//- <td class="mdl-data-table__cell--non-numeric">Ringo Starr</td>
-		//- <td class="mdl-data-table__cell--non-numeric">The funny one</td>
-		//- <td>74</td>
-		//- <td class="mdl-data-table__cell--non-numeric">Yes</td>
-		//- </tr>
-		</tbody>
-		</table>
+		div#invoicehis.mdl-card.mdl-shadow--2dp
+			div.mdl-card__title
+				div.mdl-card__title-text Booking No. #{booking.bookingid}
+		p
+		table#book.mdl-data-table.mdl-js-data-table.mdl-shadow--2dp
+			tbody
+				tr(onclick="window.document.location='/car/#{booking.regno}'")
+					td#tab
+						div.mdl-card
+							div.mdl-card__title
+								div.mdl-card__title-text.h2 Car
+							div.mdl-card__supporting
+								div.mdl-card__supporting-text #{booking.car}
+					td#tab 
+						div.mdl-card
+							div.mdl-card__title
+								div.mdl-card__title-text.h2 Rego
+							div.mdl-card__supporting
+								div.mdl-card__supporting-text #{booking.regno}
+				tr
+					td#tab(onclick="window.document.location='/carbay/#{booking.bayid}'")
+						div.mdl-card
+							div.mdl-card__title
+								div.mdl-card__title-text.h2 Bay
+							div.mdl-card__supporting
+								div.mdl-card__supporting-text #{booking.bay}
+					td#tab 
+						div.mdl-card
+							div.mdl-card__title
+								div.mdl-card__title-text.h2 Start
+							div.mdl-card__supporting
+								div.mdl-card__supporting-text #{booking.start}
+						
+				tr
+					td#tab
+						div.mdl-card
+							div.mdl-card__title
+								div.mdl-card__title-text.h2 Length
+							div.mdl-card__supporting
+								div.mdl-card__supporting-text #{booking.length} Hours
+					td#tab 
+						div.mdl-card
+							div.mdl-card__title
+								div.mdl-card__title-text.h2 When
+							div.mdl-card__supporting
+								div.mdl-card__supporting-text #{booking.whenbooked}
+		p
+					//- 
+					//- td#tab Length
+					//- td#tab When
+					//- 
+					//- 
+					//- th#tab #{booking.car}
+					//- th#tab #{booking.regno}
+					//- th#tab #{booking.bay}
+					//- th#tab #{booking.start}
+					//- th#tab #{booking.length}
+					//- th#tab #{booking.whenbooked}

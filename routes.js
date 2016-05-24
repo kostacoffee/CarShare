@@ -114,7 +114,7 @@ router.get('/booking/:id', login_required(function* (){
 router.get('/newbooking', login_required(function* (){
 	var nickname = this.cookies.get("loggedIn");
 	var member = yield getMember(nickname);
-	var availableCars = yield getAllCars();	
+	var availableCars = yield getAllCars();
 	yield this.render('newBooking', {member : member, cars : availableCars});
 }));
 
@@ -155,7 +155,7 @@ router.get('/carbays', login_required(function*(){
 	}
 	else{
 		console.log("results");
-		results = yield searchBays(location_search, name_search); 
+		results = yield searchBays(location_search, name_search);
 	}
 	yield this.render('carbaySearch', {member : member, results : results, location : location_search, name : name_search});
 }));
@@ -195,6 +195,8 @@ router.get('/invoice/:id', login_required(function*(){
 	console.log(invoiceData);
 	var bookingsForInvoice = yield getBookingsForInvoice(member.memberno, invoiceData.invoicedate);
 	console.log(bookingsForInvoice);
+	if (bookingsForInvoice.length == 0)
+		bookingsForInvoice = null;
 	yield this.render('invoice', {member : member, invoice : invoiceData, bookings : bookingsForInvoice});
 }));
 

@@ -1,7 +1,7 @@
 extends ./base.jade
 block content
 	if (latestInvoice)
-		div#invoice.mdl-card
+		div#invoice.mdl-card.mdl-shadow--2dp
 			div.mdl-card__title
 				div.mdl-card__title-text Invoices - #{latestInvoice.month} #{latestInvoice.year}
 			div.mdl-card__supporting
