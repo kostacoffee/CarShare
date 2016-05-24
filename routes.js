@@ -177,7 +177,11 @@ router.get('/car/:regno', login_required(function*(){
 	var nickname = this.cookies.get("loggedIn");
 	var member = yield getMember(nickname);
 	var car = yield getCar(this.params.regno);
-	yield this.render('cardetails', {member : member, car : car})
+	availabilities = yield getCarAvailabilities(car.regno, new Date());
+	for (var i = 0; i < availabilities.length; i++){
+		availabilities[i] = {isAvailable : availabilities[i], time : i};
+	}
+	yield this.render('cardetails', {member : member, car : car, availabilities : availabilities});
 }));
 
 router.get('/invoices', login_required(function* (){

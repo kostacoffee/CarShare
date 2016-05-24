@@ -10,4 +10,12 @@ block content
 			p Transmission: #{car.transmission}
 			p Parked in 
 				a(href='/carbay/#{car.parkedat}') #{car.locatedat_name}
-	p
+
+		div.mdl-card__supporting-text.availabilities
+			each av in availabilities
+				div.availability-container
+					label #{av.time}:00 - #{av.time+1}:00
+					if (av.isAvailable)
+						div.availability-block.available 
+					else
+						div.availability-block.not-available 	
