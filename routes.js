@@ -200,14 +200,6 @@ router.get('/invoice/:id', login_required(function*(){
 	yield this.render('invoice', {member : member, invoice : invoiceData, bookings : bookingsForInvoice});
 }));
 
-router.get('/invoices', login_required(function* (){
-	var nickname = this.cookies.get("loggedIn");
-	var member = yield getMember(nickname);
-	var invoices = yield getAllInvoices(member.memberno);
-	console.log(invoices);
-	yield this.render('invoiceList', {member : member, invoices : invoices});
-}));
-
 router.get('/location/:id', login_required(function*(){
 	var nickname = this.cookies.get("loggedIn");
 	var member = yield getMember(nickname);
