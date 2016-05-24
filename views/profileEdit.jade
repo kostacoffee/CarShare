@@ -5,7 +5,7 @@ block content
 			div.mdl-card__title-text Edit Profile
 		div#mediafillernew.mdl-card__media 
 		div#bookinginfo.mdl-card__supporting-text Don't like your password? Got married and changed your surname? No worries at all!
-			p You can change all your details here!
+			p You can change all your details here! All you have to do is fill out the field you would like to change the details of and press submit!
 		form(id='profileEdit', method='post', action='/profile/edit')
 			div.mdl-card__supporting-text
 					
@@ -26,7 +26,7 @@ block content
 					div.right-field.mdl-textfield.mdl-textfield--floating-label.is-focused
 						input#password.mdl-textfield__input(name='lastname')
 						label.mdl-textfield__label(for='lastname') Last Name 
-					p
+					div#f.mdl-card__supporting-text To change password you must type in your old password and new password
 					div.right-field.mdl-textfield.mdl-textfield--floating-label.is-focused
 						input#password.mdl-textfield__input(name='oldpassword', type='password')
 						label.mdl-textfield__label(for='oldpassword') Old Password
