@@ -22,6 +22,14 @@ function getMonth(dateIndex){
 	return monthNames[dateIndex];
 }
 
+function formatTime(date){
+	var hours = date.getHours();
+	var minutes = '00';
+	hours = (hours < 10)? '0'+hours : hours;
+
+	return hours+':'+minutes;
+}
+
 global.getMember = function(nickname) {
 	nickname = nickname.toLowerCase();
 	var user;
@@ -65,6 +73,15 @@ global.makeBooking = function(car, member, startDate, endDate){
 global.getBooking = function(memberNo, bookingID){
 	var query = "SELECT c.name as car, c.regno as regno, cb.name as bay, cb.bayid as bayid, b.startTime as start, b.bookingid as bookingid, EXTRACT(HOUR FROM b.startTime), b.endTime as end, EXTRACT(HOUR FROM b.endTime), b.whenBooked FROM Booking AS b INNER JOIN Car AS c ON b.car = c.regno INNER JOIN CarBay AS cb ON c.parkedAt = cb.bayID WHERE b.madeBy = $1 AND b.bookingID = $2";
 	return global.db.one(query, [memberNo, bookingID])
+	.then(function(data){
+		data.dayInMonth = data.start.getDate();
+		data.month = getMonth(data.start.getMonth());
+		data.year = data.start.getFullYear();
+		data.starttime = formatTime(data.start)
+		data.endtime = formatTime(data.end);
+		console.log(data);
+		return data;
+	})
 }
 
 global.adminGetBooking = function(bookingID){
@@ -74,7 +91,18 @@ global.adminGetBooking = function(bookingID){
 
 global.getBookingHistory = function(memberNo){
 	var query = "SELECT b.bookingID as id, c.name AS car, c.regno AS regno, b.startTime::DATE AS date, EXTRACT(HOUR FROM b.endTime - b.startTime) AS length FROM Booking AS b INNER JOIN Car AS c ON b.car = c.regno WHERE madeBy = $1 ORDER BY b.startTime DESC;";
-	return global.db.many(query, memberNo);
+	return global.db.many(query, memberNo)
+	.then(function(data){
+		for (var i = 0; i < data.length; i++){
+			data[i].dayInMonth = data[i].date.getDate();
+			data[i].month = getMonth(data[i].date.getMonth());
+			data[i].year = data[i].date.getFullYear();
+			data[i].startTime = formatTime(data[i].date)
+			data[i].endTime = formatTime(data[i].date);
+		}
+		//console.log(data);
+		return data;
+	});
 }
 	
 global.getCarAvailabilities = function(regno, date){
