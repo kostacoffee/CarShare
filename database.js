@@ -270,12 +270,13 @@ global.searchBays = function(location, name){
 }
 
 global.getDescendantBays = function(locID){
-	var query = "WITH RECURSIVE contains(locid, is_at) AS (SELECT locid, is_at FROM Location UNION SELECT Location.locid, contains.is_at FROM Location, contains WHERE Location.is_at = contains.locid) SELECT Carbay.* FROM contains INNER JOIN Carbay ON locID = located_at WHERE is_at = $1;";
+	var query = "WITH RECURSIVE contains(locid, is_at) AS (SELECT locid, is_at FROM Location UNION SELECT Location.locid, contains.is_at FROM Location, contains WHERE Location.is_at = contains.locid) SELECT DISTINCT Carbay.* FROM contains INNER JOIN Carbay ON locID = located_at WHERE is_at = $1 OR locID = $1;";
 	return global.db.any(query, locID)
 	.then(function(data){
 		return data;
 	})
 	.catch(function(error){
+		console.log(error);
 		return null;
 	});
 }
