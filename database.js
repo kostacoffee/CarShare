@@ -86,7 +86,7 @@ global.getBooking = function(memberNo, bookingID){
 
 		data.whenBookedDay = data.whenbooked.getDate();
 		data.whenBookedMonth = getMonth(data.whenbooked.getMonth());
-		data.whenBookedYear = data.whenbooked.getYear();
+		data.whenBookedYear = data.whenbooked.getFullYear();
 		data.whenBookedTime = formatTime(data.whenbooked);
 		return data;
 	})
@@ -114,7 +114,7 @@ global.getBookingHistory = function(memberNo){
 
 			data[i].whenBookedDay = data[i].whenbooked.getDate();
 			data[i].whenBookedMonth = getMonth(data[i].whenbooked.getMonth());
-			data[i].whenBookedYear = data[i].whenbooked.getYear();
+			data[i].whenBookedYear = data[i].whenbooked.getFullYear();
 			data[i].whenBookedTime = formatTime(data[i].whenbooked)
 		}
 		return data;
