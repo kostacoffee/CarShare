@@ -53,6 +53,36 @@ global.getMember = function(nickname) {
 	})
 }
 
+global.getNextBooking = function(memberno){
+	return global.db.one("SELECT b.starttime as start, b.car as regno, c.name as car, cb.name as bay FROM Booking AS b JOIN Car as c on b.car=c.regno JOIN Carbay cb on c.parkedat=cb.bayid where b.madeby=$1 AND b.starttime > CURRENT_TIMESTAMP ORDER BY b.starttime LIMIT 1", memberno)
+	.then(function(data){
+		data.startDayInMonth = data.start.getDate();
+		data.startMonth = getMonth(data.start.getMonth());
+		data.startYear = data.start.getFullYear();
+		data.startTime = formatTime(data.start)
+		return data;
+	})
+	.catch(function(error){
+		console.log(error);
+		return null
+	});
+}
+
+global.getPrevBooking = function(memberno){
+	return global.db.one("SELECT b.starttime as start, b.car as regno, c.name as car, cb.name as bay FROM Booking AS b JOIN Car as c on b.car=c.regno JOIN Carbay cb on c.parkedat=cb.bayid where b.madeby=$1 AND b.starttime < CURRENT_TIMESTAMP ORDER BY b.starttime DESC LIMIT 1", memberno)
+	.then(function(data){
+		data.startDayInMonth = data.start.getDate();
+		data.startMonth = getMonth(data.start.getMonth());
+		data.startYear = data.start.getFullYear();
+		data.startTime = formatTime(data.start)
+		return data;
+	})
+	.catch(function(error){
+		console.log(error);
+		return null
+	});
+}
+
 global.makeBooking = function(car, member, startDate, endDate){
 	var id;
 	return global.db.one("INSERT INTO booking (car, madeby, starttime, endtime) VALUES($1, $2, $3, $4) returning bookingid", [car, member, startDate, endDate])

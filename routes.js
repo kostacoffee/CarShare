@@ -84,7 +84,11 @@ router.get('/home', login_required(function* (){
 	console.log(member);
 	if (member == null)
 		this.redirect('/');
-	yield this.render('home', {member : member})
+	var nextBooking = yield getNextBooking(member.memberno);
+	console.log(nextBooking);
+	var prevBooking = yield getPrevBooking(member.memberno);
+	var lastInvoice = (yield getInvoices(member.memberno))[0];
+	yield this.render('home', {member : member, nextBooking : nextBooking, prevBooking : prevBooking, lastInvoice : lastInvoice})
 }));
 
 router.get('/bookingHistory', login_required(function* () {
