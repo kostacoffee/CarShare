@@ -6,8 +6,9 @@ block content
 		div#mediafillernew.mdl-card__media 
 		div#bookinginfo.mdl-card__supporting-text
 			p #{carBay.description}
-			p This car bay is found 
-				a(href='#{carBay.mapurl}') here
+			if (carBay.mapurl != '')
+				p This car bay is found 
+					a(href='#{carBay.mapurl}', target="_blank") here
 
 		div.mdl-card__title
 			h2.mdl-card__title-text Cars at this location
