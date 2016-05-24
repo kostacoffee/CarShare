@@ -111,10 +111,23 @@ router.get('/booking/:id', login_required(function* (){
 	var booking = yield getBooking(member.memberno, this.params.id);
 	booking.length = booking.end.getHours() - booking.start.getHours();
 	console.log(member);
-	yield this.render('bookingDetails', {booking : booking});
+	yield this.render('bookingDetails', {booking : booking, member : member});
 	//TODO
 }));
 
+router.get('/profile', login_required(function* (){
+	var nickname = this.cookies.get("loggedIn");
+	var member = yield getMember(nickname);
+	yield this.render('profile', {member : member});
+}));
+
+router.get('/profile/edit', login_required(function* (){
+	var nickname = this.cookies.get("loggedIn");
+	var member = yield getMember(nickname);
+
+	yield this.render('profileEdit', {member : member});
+}));
+	
 router.get('/newbooking', login_required(function* (){
 	var nickname = this.cookies.get("loggedIn");
 	var member = yield getMember(nickname);
