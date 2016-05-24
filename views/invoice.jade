@@ -1,6 +1,6 @@
 extends ./base.jade
 block content
-	div#invoice.mdl-card.mdl-shadow--2dp
+	div#invoice
 		div.mdl-card__title
 			div.mdl-card__title-text Invoice #{invoice.month} #{invoice.year}
 		div.mdl-card__supporting
@@ -23,3 +23,4 @@ block content
 						td#tabletab #{booking.endtime}
 	else
 		div.mdl-card__supporting-text No Bookings.
+	p
