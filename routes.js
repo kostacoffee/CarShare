@@ -181,10 +181,16 @@ router.get('/invoices', login_required(function* (){
 	var nickname = this.cookies.get("loggedIn");
 	var member = yield getMember(nickname);
 	var invoices = yield getInvoices(member.memberno);
+	var monthNames = ["January", "February", "March", "April", "May", "June",
+					  "July", "August", "September", "October", "November", "December"];
+
 	for (var i = 0; i < invoices.length; i++){
 		invoices[i].monthlyfee = (invoices[i].monthlyfee/100).toFixed(2);
 		invoices[i].totalamount = (invoices[i].totalamount/100).toFixed(2);
+		invoices[i].month = monthNames[invoices[i].invoicedate.getMonth()];
+		invoices[i].year = invoices[i].invoicedate.getFullYear();
 	}
+
 	console.log(invoices);
 	yield this.render('invoices', {member : member, invoices : invoices, latestInvoice : invoices[0]});
 	//TODO invoice browser
