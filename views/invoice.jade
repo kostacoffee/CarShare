@@ -1,5 +1,8 @@
 extends ./base.jade
 block content
-	mdl-card
-		mdl-card__title
-			mdl-card__title-text Invoice Id #{invoice.month} #{invoice.month}
+	div.mdl-card
+		div.mdl-card__title
+			div.mdl-card__title-text Invoice #{invoice.month} #{invoice.year}
+		div.mdl-card__supporting
+			div.mdl-card__supporting-text The following are all the bookings consisted in the Invoice Id Number: #{invoice.invoiceno}.
+		
