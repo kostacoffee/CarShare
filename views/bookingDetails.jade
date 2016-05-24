@@ -31,7 +31,7 @@ block content
 							div.mdl-card__title
 								div.mdl-card__title-text.h2 Start
 							div.mdl-card__supporting
-								div.mdl-card__supporting-text #{booking.start}
+								div.mdl-card__supporting-text #{booking.startDayInMonth} #{booking.startMonth} #{booking.startYear} #{booking.startTime}
 						
 				tr
 					td#tab
@@ -45,7 +45,7 @@ block content
 							div.mdl-card__title
 								div.mdl-card__title-text.h2 When
 							div.mdl-card__supporting
-								div.mdl-card__supporting-text #{booking.whenbooked}
+								div.mdl-card__supporting-text #{booking.whenBookedDay} #{booking.whenBookedMonth} #{booking.whenBookedYear} #{booking.whenBookedTime}
 		p
 					//- 
 					//- td#tab Length

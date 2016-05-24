@@ -19,8 +19,8 @@ block content
 					tr(onclick="window.document.location='/booking/#{booking.bookingid}'")
 						td#tabletab #{booking.bookingid}
 						td#tabletab #{booking.car}
-						td#tabletab #{booking.starttime}
-						td#tabletab #{booking.endtime}
+						td#tabletab #{booking.startDayInMonth} #{booking.startMonth} #{booking.startYear} #{booking.startTime}
+						td#tabletab #{booking.endDayInMonth} #{booking.endMonth} #{booking.endYear} #{booking.endTime}
 	else
 		div.mdl-card__supporting-text No Bookings.
 	p
