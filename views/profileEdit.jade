@@ -1,0 +1,45 @@
+extends ./base.jade
+block content
+	div.mdl-cell.mdl-cell--12-col.mdl-card.mdl-shadow--4dp
+		div.mdl-card__title
+			div.mdl-card__title-text Edit Profile
+		div#mediafillernew.mdl-card__media 
+		div#bookinginfo.mdl-card__supporting-text Don't like your password? Got married and changed your surname? No worries at all!
+			p You can change all your details here!
+		form(id='profileEdit', method='post', action='/profile/edit')
+			div.mdl-card__supporting-text
+					
+					//- div.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+					//- 	select(name="regnolist" form="carform")
+					//- 		<option value="#{entry.regno}">m#{entry.regno}</option>
+					//- 	//- input#nickname.mdl-textfield__input(name='Car', type='select')
+					//- 	//- label.mdl-textfield__label(for='Car') Car
+
+					div.mdl-textfield.mdl-textfield--floating-label.is-focused
+						input#password.mdl-textfield__input(name='title')
+						label.mdl-textfield__label(for='title') Title 
+					div.right-field.mdl-textfield.mdl-textfield--floating-label.is-focused
+						input#password.mdl-textfield__input(name='firstname')
+						label.mdl-textfield__label(for='firstname') First Name
+					div.mdl-textfield.mdl-textfield--floating-label.is-focused
+						input#password.mdl-textfield__input(name='lastname')
+						label.mdl-textfield__label(for='lastname') Last Name 
+					p
+					div.right-field.mdl-textfield.mdl-textfield--floating-label.is-focused
+						input#password.mdl-textfield__input(name='oldpassword', type='password')
+						label.mdl-textfield__label(for='oldpassword') Old Password
+					div.right-field.mdl-textfield.mdl-textfield--floating-label.is-focused
+						input#password.mdl-textfield__input(name='newpassword', type='password')
+						label.mdl-textfield__label(for='newpassword') New Password 
+						
+					input.right-field.mdl-button.mdl-js-button.mdl-button-primary(type='submit', name='Log In' )
+
+					//- 
+					//- div.mdl-card-actions.mdl-card--border
+					//- 	label Car: 
+					//- 	select(name='car')
+					//- 		each car in cars
+					//- 			option(value='#{car.regno}') #{car.name}
+					//- 	input.right-field.mdl-button.mdl-js-button.mdl-button-primary(type='submit', name='Log In' )
+					//- 
+	p
