@@ -148,12 +148,7 @@ router.get('/carbays', login_required(function*(){
 	var nickname = this.cookies.get("loggedIn");
 	var member = yield getMember(nickname);
 
-	var results;
-	console.log(this.request.body.search_string)
-	if (!this.request.body.search_string) 
-		results = [yield getCarBay(member.homebay)];
-	else
-		results = yield searchBays(this.request.body.search_string);
+	var results = yield searchBays(this.request.body.search_string);
 
 	yield this.render('carbaySearch', {member : member, results : results});
 }));
@@ -179,7 +174,7 @@ router.get('/invoices', login_required(function* (){
 	var member = yield getMember(nickname);
 	var invoices = yield getInvoices(member.memberno);
 	console.log(invoices);
-	yield this.render('invoices', {member : member, invoices : invoices});
+	yield this.render('invoices', {member : member, invoices : invoices, latestInvoice : invoices[0]});
 	//TODO invoice browser
 }));
 
