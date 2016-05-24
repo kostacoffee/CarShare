@@ -104,7 +104,6 @@ router.get('/bookingHistory', login_required(function* () {
 router.get('/booking/:id', login_required(function* (){
 	var nickname = this.cookies.get("loggedIn");
 	var member = yield getMember(nickname);
-	// use adminGetBooking for testing.
 	var booking = yield getBooking(member.memberno, this.params.id);
 	booking.length = booking.end.getHours() - booking.start.getHours();
 	console.log(member);
@@ -173,7 +172,6 @@ router.get('/car/:regno', login_required(function*(){
 	var nickname = this.cookies.get("loggedIn");
 	var member = yield getMember(nickname);
 	var car = yield getCar(this.params.regno);
-	console.log(car);
 	yield this.render('cardetails', {member : member, car : car})
 }));
 

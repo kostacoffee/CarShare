@@ -94,10 +94,10 @@ global.getCar = function(regno){
 					available[h] = false;
 			}
 			car.availabilities = available;
-			console.log(car);
-			return getLocation(car.parkedat);
+			return global.db.one("SELECT * FROM Carbay WHERE bayid = $1", car.parkedat)
 		})
 		.then(function(data){
+			console.log(data);
 			car.locatedat_name = data.name
 			return car;
 		})
