@@ -53,6 +53,36 @@ global.getMember = function(nickname) {
 	})
 }
 
+global.getNextBooking = function(memberno){
+	return global.db.one("SELECT b.starttime as start, b.car as regno, c.name as car, cb.name as bay FROM Booking AS b JOIN Car as c on b.car=c.regno JOIN Carbay cb on c.parkedat=cb.bayid where b.madeby=$1 AND b.starttime > CURRENT_TIMESTAMP ORDER BY b.starttime LIMIT 1", memberno)
+	.then(function(data){
+		data.startDayInMonth = data.start.getDate();
+		data.startMonth = getMonth(data.start.getMonth());
+		data.startYear = data.start.getFullYear();
+		data.startTime = formatTime(data.start)
+		return data;
+	})
+	.catch(function(error){
+		console.log(error);
+		return null
+	});
+}
+
+global.getPrevBooking = function(memberno){
+	return global.db.one("SELECT b.starttime as start, b.car as regno, c.name as car, cb.name as bay FROM Booking AS b JOIN Car as c on b.car=c.regno JOIN Carbay cb on c.parkedat=cb.bayid where b.madeby=$1 AND b.starttime < CURRENT_TIMESTAMP ORDER BY b.starttime DESC LIMIT 1", memberno)
+	.then(function(data){
+		data.startDayInMonth = data.start.getDate();
+		data.startMonth = getMonth(data.start.getMonth());
+		data.startYear = data.start.getFullYear();
+		data.startTime = formatTime(data.start)
+		return data;
+	})
+	.catch(function(error){
+		console.log(error);
+		return null
+	});
+}
+
 global.makeBooking = function(car, member, startDate, endDate){
 	var id;
 	return global.db.one("INSERT INTO booking (car, madeby, starttime, endtime) VALUES($1, $2, $3, $4) returning bookingid", [car, member, startDate, endDate])
@@ -122,15 +152,17 @@ global.getBookingHistory = function(memberNo){
 }
 	
 global.getCarAvailabilities = function(regno, date){
-	return global.db.any("SELECT extract(hour from starttime) as start, extract(hour from endtime) as end from Booking where car=$1 and starttime::date=$2::date", [regno, date])
+	return global.db.any("SELECT EXTRACT(HOUR FROM h.h) AS h FROM generate_series(TIMESTAMP $2, TIMESTAMP $2 + INTERVAL '23 hours', INTERVAL '1 hour') AS h WHERE EXISTS(SELECT * FROM Booking AS b WHERE b.car = $1 AND (b.startTime, b.endTime) OVERLAPS (h.h, h.h + INTERVAL '1 hour'));", [regno, date])
 	.then(function(data){
 		var available = new Array(24).fill(true);
-		for (var i = 0; i < data.length; i++){
-			for (var h = data[i].start; h < data[i].end; h++)
-				available[h] = false;
-		}
+		for (var i = 0; i < data.length; i++)
+			available[data[i].h] = false;
 		return available;
 	})
+}
+
+global.getBookingClash = function(regno, startTime, endTime){
+	return global.db.any("SELECT * FROM Booking AS b WHERE b.car = $1 AND (b.startTime, b.endTime) OVERLAPS (TIMESTAMP $2, TIMESTAMP $3);", [regno, startTime, endTime]);
 }
 
 global.getCar = function(regno){

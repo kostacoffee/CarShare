@@ -7,30 +7,51 @@ block content
 					div#addbutton.mdl-button.mdl-js-button.mdl-button--fab.mdl-js-ripple-effect.mdl-button--colored
 						<i class="material-icons mdl-color-text--white" role="presentation">add</i>
 					div.mdl-tooltip.mdl-tooltip--left(for='addbutton') New Booking
-				div.mdl-card__title
-					div.mdl-card__title-text Bookings coming up...
-				div#date.mdl-card__supporting-text Date:
-				div#loc.mdl-card__supporting-text Location:
-				div#bookingmain.mdl-card__supporting-text Car:
-				div.mdl-card__title
-					div.mdl-card__title-text Last Booking was...
-				div.mdl-card__supporting-text Date: 
-				div.mdl-card__supporting-text Location:
-				div.mdl-card__supporting-text Car:
+				if (nextBooking)
+					div.mdl-card__title
+						div.mdl-card__title-text Bookings coming up...
+					div#date.mdl-card__supporting-text Date: #{nextBooking.startDayInMonth} #{nextBooking.startMonth} #{nextBooking.startYear} at #{nextBooking.startTime} 
+					div#loc.mdl-card__supporting-text Location: #{nextBooking.bay}
+					div#bookingmain.mdl-card__supporting-text Car: #{nextBooking.car} - #{nextBooking.regno}
+				else 
+					div.mdl-card__title
+						div.mdl-card__title-text You have no bookings coming up!
+				div.mdl-card__actions.mdl-card--border
+				if (prevBooking)
+					div.mdl-card__title
+						div.mdl-card__title-text Last Booking was...
+					div.mdl-card__supporting-text Date: #{prevBooking.startDayInMonth} #{prevBooking.startMonth} #{prevBooking.startYear} at #{prevBooking.startTime} 
+					div#loc.mdl-card__supporting-text Location: #{prevBooking.bay}
+					div#bookingmain.mdl-card__supporting-text Car: #{prevBooking.car} - #{prevBooking.regno}
+				else
+					div.mdl-card__title
+						div.mdl-card__title-text You had no previous bookings
+
 		div.mdl-cell.mdl-cell--5-col
 			div#Welcome.mdl-card.mdl-color--white.mdl-shadow--2dp
 				div.mdl-card__title
 					div.mdl-card__title-text Welcome #{member.nametitle} #{member.namegiven} #{member.namefamily}
-				div.mdl-card__supporting-text Home bay: #{member.homebayname}
-				div.mdl-card__supporting-text Membership Plan: #{member.subscribed}
+				div.mdl-card__supporting-text Home bay: 
+					a(href='/carbay/#{member.homebay}') #{member.homebayname}
+				div.mdl-card__supporting-text Membership Plan: 
+					a(href='/profile') #{member.subscribed}
 				div.mdl-card__supporting-text Member Since: #{member.since}
 				div.mdl-card__supporting-text # of Bookings: #{member.stat_nrofbookings}
-				div.mdl-card__supporting-text Current Balance:
+				if (lastInvoice)
+					div.mdl-card__supporting-text Current Balance: 
+						a(href='/invoices') $#{lastInvoice.totalamount/100}
 		div.mdl-cell.mdl-cell--4-col
 			div#filler.mdl-card.mdl-color--white.mdl-shadow--2dp
+				div.mdl-card__title
+						div.mdl-card__title-text News
+				div.mdl-card__supporting-text
+					p Coming soon!
+
 		div.mdl-cell.mdl-cell--8-col
 			div#filler.mdl-card.mdl-color--white.mdl-shadow--2dp
+				div.mdl-card__title
+						div.mdl-card__title-text Announcements
 				div#mediafiller.mdl-card__media.mdl-color--white
-					
+				
 				div.mdl-card__supporting-text.meta.mdl-color-text--grey-600 New CarBay!
 	p

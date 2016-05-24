@@ -84,7 +84,11 @@ router.get('/home', login_required(function* (){
 	console.log(member);
 	if (member == null)
 		this.redirect('/');
-	yield this.render('home', {member : member})
+	var nextBooking = yield getNextBooking(member.memberno);
+	console.log(nextBooking);
+	var prevBooking = yield getPrevBooking(member.memberno);
+	var lastInvoice = (yield getInvoices(member.memberno))[0];
+	yield this.render('home', {member : member, nextBooking : nextBooking, prevBooking : prevBooking, lastInvoice : lastInvoice})
 }));
 
 router.get('/bookingHistory', login_required(function* () {
@@ -133,6 +137,15 @@ router.post('/newbooking', login_required(function* (){
 			return;
 		}
 	}
+
+	/*
+	//TO USE: Uncomment this, and delete all the getCarAvailabilities stuff in here
+	var clashes = yield getBookingClash(car, this.request.body.startDate, this.request.body.endDate);
+	if (clashes.length > 0){
+		this.redirect('/newBooking');
+		return;
+	}
+	*/
 
 	console.log("making");
 	var bookingId = yield makeBooking(car, member.memberno, start, end)
