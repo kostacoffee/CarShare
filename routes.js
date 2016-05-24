@@ -53,6 +53,11 @@ function* getCost(memberno, duration){
 }
 
 router.get('/', function* (){
+	var nickname = this.cookies.get("loggedIn");
+	if (nickname != null && (yield getMember(nickname)) != null){
+		this.redirect('/home');
+		return;
+	}
 	this.status = 200;
 	yield this.render('index');
 });
@@ -61,7 +66,7 @@ router.post('/login', function* () {
 	var nickname = this.request.body.nickname.trim();
 	var password = this.request.body.password;
 
-	var member = yield getMember(nickname)
+	var member = yield getMember(nickname);
 
 	if (member == null){
 		console.log('member cant be found');

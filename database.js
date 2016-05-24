@@ -53,6 +53,9 @@ global.getMember = function(nickname) {
 	return global.db.one(query, nickname)
 	.then(function(data){
 		user = data;
+		user.startDay = user.since.getDay();
+		user.startMonth = getMonth(user.since.getMonth());
+		user.startYear = user.since.getFullYear();
 		return global.db.any("SELECT name from carbay where bayid=$1", user.homebay);
 	})
 	.then(function(data){
@@ -66,6 +69,8 @@ global.getMember = function(nickname) {
 			user.homebayname = data[0].name;
 		}
 		return user;
+	}).catch(function(erorr){
+		return null;
 	})
 }
 
