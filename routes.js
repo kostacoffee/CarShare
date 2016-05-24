@@ -127,6 +127,28 @@ router.get('/profile/edit', login_required(function* (){
 
 	yield this.render('profileEdit', {member : member});
 }));
+
+router.post('/profile/edit', login_required(function* (){
+	var nickname = this.cookies.get("loggedIn");
+	var member = yield getMember(nickname);
+
+	var title = this.request.body.title;
+	var firstname = this.request.body.firstname;
+	var lastname = this.request.body.lastname;
+	var oldPassword = this.request.body.oldpassword;
+	var newPassword = this.request.body.newpassword;
+
+	if (newPassword != null || newPassword.length > 0){
+		var memberHash = member.password;
+		var oldHash = getHash(oldpassword, member.pw_salt);
+		if (memberHash == oldHash){
+			//insert new password here
+			var newHash = getHash(newPassword, member.pw_salt);
+			yield updatePassword(member.memberno, newHash);
+		}
+	}	
+
+}));
 	
 router.get('/newbooking', login_required(function* (){
 	var nickname = this.cookies.get("loggedIn");
