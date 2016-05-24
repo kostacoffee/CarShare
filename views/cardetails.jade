@@ -10,6 +10,9 @@ block content
 			p Transmission: #{car.transmission}
 			p Parked in 
 				a(href='/carbay/#{car.parkedat}') #{car.locatedat_name}
+				div#submitsearch.mdl-card-actions.mdl-card--border
+					a(href='/newbooking')
+						button.mdl-button.mdl-js-button.mdl-button-primary.mdl-button--raised.mdl-js-ripple-effect.mdl-button--accent Book Me!
 
 		div.mdl-card__supporting-text.availabilities.mdl-grid
 			each i in [0,1,2,3,4,5,6,7,8,9,10,11]
