@@ -17,7 +17,7 @@ block content
 					th#datebooking Total Amount
 			tbody
 				//- each entry in invoices	
-				tr
+				tr(onclick="window.document.location='/invoice/#{latestInvoice.invoiceno}'")
 					td#idbooking #{latestInvoice.invoiceno}
 					td#carbooking #{latestInvoice.invoicedate}
 					td#regnobooking $ #{latestInvoice.monthlyfee}
@@ -37,7 +37,7 @@ block content
 					th#datebooking Total Amount
 			tbody
 				each invoice in invoices	
-					tr
+					tr(onclick="window.document.location='/invoice/#{invoice.invoiceno}'")
 						td#idbooking #{invoice.invoiceno}
 						td#carbooking #{invoice.invoicedate}
 						td#regnobooking $ #{invoice.monthlyfee}
