@@ -16,13 +16,20 @@ block content
 					//- 	//- label.mdl-textfield__label(for='Car') Car
 
 					div.mdl-textfield.mdl-textfield--floating-label.is-focused
-						input#password.mdl-textfield__input(name='Start', type='datetime-local')
+						input#password.mdl-textfield__input(name='startDate', type='datetime-local')
 						label.mdl-textfield__label(for='Start') Start Time
 					div.right-field.mdl-textfield.mdl-textfield--floating-label.is-focused
-						input#password.mdl-textfield__input(name='End', type='datetime-local')
+						input#password.mdl-textfield__input(name='endDate', type='datetime-local')
 						label.mdl-textfield__label(for='End') End Time
+					
 
 
 					div.mdl-card-actions.mdl-card--border
 						input.mdl-button.mdl-js-button.mdl-button-primary(type='submit', name='Log In' )
+						label Car: 
+						select(name='car')
+							each car in cars
+								option(value='#{car.regno}') #{car.name}
+						input.right-field.mdl-button.mdl-js-button.mdl-button-primary(type='submit', name='Log In' )
+	
 	p

@@ -1,9 +1,10 @@
 CREATE USER webuser WITH PASSWORD 'MnU79g&@s9nacLcB';
 
 GRANT ALL ON SCHEMA carsharing to webuser;
-GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA carsharing TO webuser;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA carsharing TO webuser; --TODO!!!!!
 
 ALTER USER webuser SET search_path = carsharing;
+GRANT USAGE ON SEQUENCE booking_bookingid_seq TO webuser; 
 
 ALTER TABLE carsharing.Member ALTER COLUMN password TYPE char(88);
 ALTER TABLE carsharing.Member ALTER COLUMN pw_salt TYPE char(24);

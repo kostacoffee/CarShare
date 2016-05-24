@@ -47,22 +47,23 @@ global.getMember = function(nickname) {
 
 global.makeBooking = function(car, member, startDate, endDate){
 	var id;
-	return global.db.query("INSERT INTO booking (car, madeby, starttime, endtime) VALUES($1, $2, $3, $4) returning bookingid", [car, member, startDate, endDate])
+	return global.db.one("INSERT INTO booking (car, madeby, starttime, endtime) VALUES($1, $2, $3, $4) returning bookingid", [car, member, startDate, endDate])
 	.then(function(data){
-		id = data;
-		return global.db.query("UPDATE member SET stat_nrofbookings = stat_nrofbookings+1 where memberNo=$1", member);
+		id = data.bookingid;
+		return global.db.query("UPDATE member SET stat_nrofbookings = stat_nrofbookings+1 where memberNo=$1", member)
 	})
 	.then(function(){
 		return id;
 	})
 	.catch(function(error){
+		console.log(error);
 		return null;
-	})
+	});
 }
 
 
 global.getBooking = function(memberNo, bookingID){
-	var query = "SELECT c.name as car, c.regno as regno, cb.name as bay, b.startTime as start, EXTRACT(HOUR FROM b.startTime), b.endTime as end, EXTRACT(HOUR FROM b.endTime), b.whenBooked FROM Booking AS b INNER JOIN Car AS c ON b.car = c.regno INNER JOIN CarBay AS cb ON c.parkedAt = cb.bayID WHERE b.madeBy = $1 AND b.bookingID = $2";
+	var query = "SELECT c.name as car, c.regno as regno, cb.name as bay, cb.bayid as bayid, b.startTime as start, b.bookingid as bookingid, EXTRACT(HOUR FROM b.startTime), b.endTime as end, EXTRACT(HOUR FROM b.endTime), b.whenBooked FROM Booking AS b INNER JOIN Car AS c ON b.car = c.regno INNER JOIN CarBay AS cb ON c.parkedAt = cb.bayID WHERE b.madeBy = $1 AND b.bookingID = $2";
 	return global.db.one(query, [memberNo, bookingID])
 }
 
@@ -76,13 +77,16 @@ global.getBookingHistory = function(memberNo){
 	return global.db.many(query, memberNo);
 }
 	
-global.makeBooking = function(regno, memberNo, startTime, endTime){
-	var query = "INSERT INTO Booking (car, madeBy, whenBooked, startTime, endTime) VALUES ($1, $2, CURRENT_TIMESTAMP, $3, $4);";
-	return global.db.none(query, [regno, memberNo, startTime, endTime]);
-}
-
 global.getCarAvailabilities = function(regno, date){
 	return global.db.any("SELECT extract(hour from starttime) as start, extract(hour from endtime) as end from Booking where car=$1 and starttime::date=$2::date", [regno, date])
+	.then(function(data){
+		var available = new Array(24).fill(true);
+		for (var i = 0; i < data.length; i++){
+			for (var h = data[i].start; h < data[i].end; h++)
+				available[h] = false;
+		}
+		return available;
+	})
 }
 
 global.getCar = function(regno){
@@ -132,7 +136,7 @@ global.getCarBay = function(id){
 }
 
 global.getAllCars = function(){
-	return global.db.many("SELECT * From Car");
+	return global.db.many("SELECT * From Car ORDER BY name");
 }
 
 
@@ -169,7 +173,6 @@ global.getInvoices = function(memberno){
 global.getBookingsForInvoice = function(memberno, date){
 	var startDate = new Date(date.getFullYear(), date.getMonth(), 2);
 	var endDate = new Date(date.getFullYear(), date.getMonth() + 1, 2);
-
 	var query = "SELECT bookingid, car, starttime, endtime from Booking where madeby=$1 and endtime>=$2 and endtime < $3"
 	return global.db.any(query, [memberno, startDate, endDate]);
 }
