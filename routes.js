@@ -147,10 +147,18 @@ router.post('/newbooking', login_required(function* (){
 router.get('/carbays', login_required(function*(){
 	var nickname = this.cookies.get("loggedIn");
 	var member = yield getMember(nickname);
-
-	var results = yield searchBays(this.request.body.search_string);
-
-	yield this.render('carbaySearch', {member : member, results : results});
+	var location_search = this.query.location_search;
+	var name_search = this.query.bay_name;
+	var results;
+	if (location_search == null && name_search == null && member.homebay != null){
+		console.log("homebay");
+		results = [yield getCarBay(member.homebay)];
+	}
+	else{
+		console.log("results");
+		results = yield searchBays(location_search, name_search); 
+	}
+	yield this.render('carbaySearch', {member : member, results : results, location : location_search, name : name_search});
 }));
 
 router.get('/carbay/:id', login_required(function* (){
@@ -173,7 +181,6 @@ router.get('/invoices', login_required(function* (){
 	var nickname = this.cookies.get("loggedIn");
 	var member = yield getMember(nickname);
 	var invoices = yield getInvoices(member.memberno);
-	console.log(invoices);
 	yield this.render('invoices', {member : member, invoices : invoices, latestInvoice : invoices[0]});
 	//TODO invoice browser
 }));
@@ -186,7 +193,6 @@ router.get('/invoice/:id', login_required(function*(){
 	var bookingsForInvoice = yield getBookingsForInvoice(member.memberno, invoiceData.invoicedate);
 	console.log(bookingsForInvoice);
 	yield this.render('invoice', {member : member, invoice : invoiceData, bookings : bookingsForInvoice});
-	
 }));
 
 router.get('/invoices', login_required(function* (){

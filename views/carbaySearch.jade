@@ -12,9 +12,16 @@ block content
 				input.mdl-button.mdl-js-button.mdl-button-primary.mdl-button--raised.mdl-js-ripple-effect.mdl-button--accent(type='submit')
 	div.mdl-cell.mdl-cell--12-col
 		div.mdl-card.mdl-color--white.mdl-shadow--2dp
-			if (locals.results)
+			if (results)
 				div.mdl-card__title
-					div.mdl-card__title-text Results:
+					div.mdl-card__title-text Results
+				div.mdl-card__supporting-text
+					if (location)
+						p Location: #{location}
+					if (name)
+						p Bay name: #{name}
+					if (!location && !name)
+						p No search.
 				table#results.mdl-data-table.mdl-js-data-table
 					tbody
 						each result in results
