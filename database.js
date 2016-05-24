@@ -207,10 +207,10 @@ global.getCarBayAt = function(locID){
 	});
 }
 
-global.searchBays = function(search_string){
-	search_string = '%' + search_string.toLowerCase() + '%';
- 	var bayData;
- 	return global.db.many("SELECT * FROM Carbay WHERE LOWER(name) LIKE $1 OR LOWER(address) LIKE $1;", search_string)
+global.searchBays = function(location, name){
+	var locationSearch = "%" + location.toLowerCase() + "%";
+	var nameSearch = "%" + name.toLowerCase() + "%";
+ 	return global.db.any("SELECT Carbay.* FROM Carbay JOIN Location ON locid=located_at WHERE LOWER(Carbay.name) LIKE $1 AND LOWER(location.name) LIKE $2", [nameSearch, locationSearch])
 	.then(function(data){
 		return data;
 	})
